@@ -10,6 +10,20 @@ function findKompilesByUserId(userId) {
   	});
 }
 
+function findKompilesByEmail(email) {
+  return models.User.findOne({
+      where: {
+          email : email
+      }
+    }).then(user => 
+      models.Kompile.findAll({
+       where: {
+        'UserId': user.id
+       }
+      })
+    );
+}
+
 function saveKompile(userId, kompile) {
 	return models.User.findOne({
     	where: {
@@ -25,5 +39,6 @@ function saveKompile(userId, kompile) {
 
 module.exports = {
   findKompilesByUserId: findKompilesByUserId,
+  findKompilesByEmail: findKompilesByEmail,
   saveKompile: saveKompile
 };
