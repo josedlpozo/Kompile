@@ -3,17 +3,25 @@ var router = express.Router();
 
 var userService = require('./UserService');
 
-router.get('/', function(req, res, next) {
-  userService.retrieveUsers()
-    .then(users => {
-      if (!users) res.status(404).send({ error: 'Users not found' });
-      else res.send(users);
-    }).catch(err => res.status(500).send({ error: err.toString() }));
+router.get('/login', function(req, res, next) {
+  res.render('login', { message: '' });
 });
 
-router.post('/create', function(req, res, next) {
-	userService.saveUser(req.body).then(user => res.send(user))
-	.catch(err => res.status(500).send({ error: err.toString() }));
+router.post('/login', function(req, res, next) {
+	console.log(req.body.email)
+	console.log(req.body.password)
+	userService.getUser(req.body.email, req.body.password)
+	.then(user => { 
+		if (user) {
+			res.redirect('/')
+		} else {
+			res.render('login', { message: 'No user found or password incorrect' })
+		}
+	}).catch(err => res.render('login', { message: 'No user found or password incorrect' }));
+});
+
+router.get('/', function(req, res, next) {
+  res.render('index');
 });
 
 module.exports = router;

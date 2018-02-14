@@ -10,6 +10,15 @@ function findByEmail(email) {
   });
 }
 
+function get(email, password) {
+  return models.User.findOne({
+    where: {
+      email: email,
+      password: password
+    }
+  });
+}
+
 function findAll() {
   return models.User.findAll();
 }
@@ -34,6 +43,7 @@ function saveUser(user) {
 
 module.exports = {
   findByEmail: findByEmail,
+  get: get,
   saveUser: saveUser,
   findAll: findAll
 };

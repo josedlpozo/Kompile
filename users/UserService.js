@@ -46,9 +46,23 @@ function saveUser(user) {
   	});
 }
 
+function getUser(email, password) {
+  return new Promise((resolve, reject) => {
+      userRepository.get(email, password)
+        .then(user => {
+          resolve(userMapper.mapUser(user));
+        })
+        .catch(err => {
+          if (err.fields.indexOf('email') > -1) reject('Already exists a user with this email')
+          else reject(err);
+        });
+    });
+}
+
 module.exports = {
 	retrieveUser: retrieveUser,
 	retrieveUsers: retrieveUsers,
 	retrieveById: retrieveById,
+  getUser: getUser,
 	saveUser: saveUser
 }
