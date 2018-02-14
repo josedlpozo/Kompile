@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 
 var userApiController = require('./users/UserApiController');
 var userController = require('./users/UserController');
@@ -22,12 +24,31 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser("kompiles"));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: "kompiles",
+    store: new RedisStore()
+}));
 
 app.use('/', userController);
 app.use('/api/users', userApiController);
 app.use('/api/kompiles', kompilesApiController);
+
+app.use(function(req, res, next) {
+  if (!req.session.redir) {
+    req.session.redir = '/';
+  }
+
+  if (!req.path.match(/\/login|\/logout|\/user/)) {
+    req.session.redir = req.path;
+  }
+
+  res.locals.session = req.session;
+  next();
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
