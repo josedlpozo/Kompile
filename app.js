@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var RedisStore = require('connect-redis')(session);
+var FileStore = require('session-file-store')(session);
 
 var userApiController = require('./users/UserApiController');
 var userController = require('./users/UserController');
@@ -30,7 +30,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     secret: "kompiles",
-    store: new RedisStore()
+    store: new FileStore()
 }));
 
 app.use('/', userController);

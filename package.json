@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "body-parser": "~1.18.2",
-    "connect-redis": "^3.3.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
@@ -19,6 +18,7 @@
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.23.2",
     "serve-favicon": "~2.4.5",
+    "session-file-store": "^1.2.0",
     "sqlite3": "^3.1.13",
     "underscore": "^1.8.3"
   },
