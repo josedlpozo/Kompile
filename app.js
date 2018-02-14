@@ -10,6 +10,7 @@ var FileStore = require('session-file-store')(session);
 var userApiController = require('./users/UserApiController');
 var userController = require('./users/UserController');
 var kompilesApiController = require('./kompiles/KompileApiController');
+var dashboardController = require('./kompiles/DashboardController');
 
 var database = require('./Database');
 
@@ -34,6 +35,7 @@ app.use(session({
 }));
 
 app.use('/', userController);
+app.use('/', dashboardController);
 app.use('/api/users', userApiController);
 app.use('/api/kompiles', kompilesApiController);
 
