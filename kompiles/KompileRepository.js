@@ -5,25 +5,22 @@ var models = require('../models');
 function findKompilesByUserId(userId) {
 	return models.Kompile.findAll({
     	where: {
-      		'user.id' : userId
-    	},
-    	include: [
-    		{ model: models.User, as: models.User.tableName }
-    	]
+      		'UserId' : userId
+    	}
   	});
 }
 
-function saveKompile(userId, Kompile) {
+function saveKompile(userId, kompile) {
 	return models.User.findOne({
     	where: {
       		id : userId
     	}
-  	}).then(user => {
-  		resolve(models.Kompile.create({
-			user: user,
-			duration: duration
-		}))
-  	});
+  	}).then(user => 
+  		models.Kompile.create({
+			 UserId: user.id,
+			 duration: kompile.duration
+		  })
+  	);
 }
 
 module.exports = {

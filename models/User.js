@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 
     alias: DataTypes.STRING,
 
-    email: { type: DataTypes.STRING, allowNull: false, defaultValue: true, primaryKey: true },
+    email: { type: DataTypes.STRING, allowNull: false, unique: true },
 
     password: DataTypes.STRING,
 
@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.associate = function (models) {
-    models.User.hasMany(models.Kompile, {foreignKey: 'id', sourceKey: 'email'});
+    models.User.hasMany(models.Kompile);
   };
 
   return User;
