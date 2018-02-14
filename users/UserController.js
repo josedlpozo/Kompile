@@ -4,9 +4,8 @@ var router = express.Router();
 var userService = require('./UserService');
 
 router.get('/login', function(req, res, next) {
-	console.log(req.session)
 	if (req.session && req.session.logged) {
-		res.redirect('/')
+		res.redirect('/dashboard')
 	} else {
 		res.render('login', { message: '' });
 	}
@@ -33,7 +32,15 @@ router.post('/logout', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-  res.render('index');
+  res.render('index', { logged: req.session.logged });
 });
+
+function loginRequired(req, res, next) {
+	if (req.session && req.session.logged) {
+		next();
+	} else {
+		res.redirect('/login');
+	}
+}
 
 module.exports = router;
