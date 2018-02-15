@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('underscore')
 var kompileRepository = require('./KompileRepository');
 var kompileMapper = require('./KompileMapper');
 
@@ -26,8 +27,8 @@ function retrieveKompilesByEmail(email) {
 function retrieveKompilesByGroup(group) {
   return new Promise((resolve, reject) => {
       kompileRepository.findKompilesByGroup(group)
-        .then(kompiles => {
-          resolve(kompileMapper.mapKompiles(kompiles));
+        .then(kompilesByUser => {
+          resolve(_.map(kompilesByUser, kompiles=> kompileMapper.mapKompiles(kompiles)));
         })
         .catch(err => reject(err));
     });

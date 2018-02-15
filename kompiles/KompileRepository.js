@@ -1,6 +1,7 @@
 'use strict';
 
 var models = require('../models');
+var _ = require('underscore');
 
 function findKompilesByUserId(userId) {
 	return models.Kompile.findAll({
@@ -24,6 +25,14 @@ function findKompilesByEmail(email) {
     );
 }
 
+function findKompilesByGroup(group) {
+  return models.User.findAll({
+      where: {
+          group : group
+      }
+    }).then(users => Promise.all(_.map(users, user => findKompilesByUserId(user.id))));
+}
+
 function saveKompile(userId, kompile) {
 	return models.User.findOne({
     	where: {
@@ -40,5 +49,6 @@ function saveKompile(userId, kompile) {
 module.exports = {
   findKompilesByUserId: findKompilesByUserId,
   findKompilesByEmail: findKompilesByEmail,
+  findKompilesByGroup: findKompilesByGroup,
   saveKompile: saveKompile
 };

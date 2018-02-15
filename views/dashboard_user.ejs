@@ -5,26 +5,21 @@
   </head>
   <body>
     <h1>Kompile</h1>
-    <p>Here we will show a dashboard of your team</p>
-
+    <p>Here are your compile times</p>
+    <th>User <%= user.email %></th>
 
     <table>
       <tr>
         <th>id</th>
         <th>Duration</th>
-        <th>User</th>
       </tr>
       <% for (var i = 0; i < kompiles.length; i++) { %>
-        <% for (var j = 0; j < kompiles[i].length; j++) { %>
-          <tr>
-            <td><%= kompiles[i][j].id %></td>
-            <td><%= kompiles[i][j].duration %></td>
-            <td>User <%= i %></td>
-          </tr>
-        <% } %>
+        <tr>
+          <td><%= kompiles[i].id %></td>
+          <td><%= kompiles[i].duration %></td>
+        </tr>
     <% } %>
     </table>
-
 
     <% if (user) { %>
     <form action="/logout" method="post">

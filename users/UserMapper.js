@@ -9,7 +9,8 @@ function mapUser(user) {
     id: user.id,
     email: user.email,
     alias: user.alias,
-    language: user.language
+    language: user.language,
+    group: user.group
   };
 }
 
