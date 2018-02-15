@@ -23,6 +23,16 @@ function retrieveKompilesByEmail(email) {
     });
 }
 
+function retrieveKompilesByGroup(group) {
+  return new Promise((resolve, reject) => {
+      kompileRepository.findKompilesByGroup(group)
+        .then(kompiles => {
+          resolve(kompileMapper.mapKompiles(kompiles));
+        })
+        .catch(err => reject(err));
+    });
+}
+
 function saveKompile(userId, kompile) {
 	return new Promise((resolve, reject) => {
     	kompileRepository.saveKompile(userId, kompile)
@@ -36,5 +46,6 @@ function saveKompile(userId, kompile) {
 module.exports = {
 	retrieveKompiles: retrieveKompiles,
   retrieveKompilesByEmail: retrieveKompilesByEmail,
+  retrieveKompilesByGroup: retrieveKompilesByGroup,
 	saveKompile: saveKompile
 }
