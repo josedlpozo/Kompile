@@ -36,6 +36,7 @@ function retrieveKompilesByGroup(group) {
 
 function saveKompile(userId, kompile) {
 	return new Promise((resolve, reject) => {
+      if (!kompile.duration) reject("Duration is not present")
     	kompileRepository.saveKompile(userId, kompile)
       	.then(kompile => {
         	resolve(kompileMapper.mapKompile(kompile));

@@ -13,7 +13,7 @@ function mapKompile(kompile) {
 
 function mapKompiles(kompiles) {
   if (!kompiles) return null;
-
+  console.log(kompiles)
   var savedKompiles = _.map(kompiles, kompile => mapKompile(kompile));
 
   return savedKompiles;

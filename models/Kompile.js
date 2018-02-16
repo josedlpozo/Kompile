@@ -7,5 +7,9 @@ module.exports = (sequelize, DataTypes) => {
 
   });
 
+  Kompile.associate = function (models) {
+    models.Kompile.belongsTo(models.User);
+  };
+
   return Kompile;
 };

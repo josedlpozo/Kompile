@@ -40,7 +40,7 @@ function saveUser(user) {
         	resolve(userMapper.mapUser(user));
       	})
       	.catch(err => {
-      		if (err.fields.indexOf('email') > -1) reject('Already exists a user with this email')
+      		if (err.fields && err.fields.indexOf('email') > -1) reject('Already exists a user with this email')
       		else reject(err);
       	});
   	});

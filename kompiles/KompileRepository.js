@@ -5,24 +5,26 @@ var _ = require('underscore');
 
 function findKompilesByUserId(userId) {
 	return models.Kompile.findAll({
-    	where: {
-      		'UserId' : userId
-    	}
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email'],
+        where: {
+          id : userId
+        }
+      }]
   	});
 }
 
 function findKompilesByEmail(email) {
-  return models.User.findOne({
-      where: {
+  return models.Kompile.findAll({
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email'],
+        where: {
           email : email
-      }
-    }).then(user => 
-      models.Kompile.findAll({
-       where: {
-        'UserId': user.id
-       }
-      })
-    );
+        }
+      }]
+    });
 }
 
 function findKompilesByGroup(group) {
