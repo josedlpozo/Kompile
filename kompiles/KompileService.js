@@ -18,7 +18,6 @@ function retrieveKompilesByEmail(email) {
   return new Promise((resolve, reject) => {
       kompileRepository.findKompilesByEmail(email)
         .then(kompiles => {
-        	console.log(kompiles)
         	if (!kompiles || kompiles.length == 0) reject({ error: 404 })
         	else resolve(kompileMapper.mapKompiles(kompiles));
         })
