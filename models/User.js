@@ -3,15 +3,11 @@
 module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define('User', {
 
-    language: DataTypes.STRING,
-
     alias: DataTypes.STRING,
 
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
 
-    password: DataTypes.STRING,
-
-    group: DataTypes.STRING
+    password: { type: DataTypes.STRING, allowNull: false, defaultValue: "default" },
 
   });
 

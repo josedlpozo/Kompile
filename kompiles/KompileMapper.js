@@ -5,15 +5,20 @@ var _ = require('underscore');
 function mapKompile(kompile) {
   if (!kompile) return null;
 
+  let epoch = new Date(kompile.createdAt).getTime()
+
   return {
     id: kompile.id,
-    duration: kompile.duration
+    duration: kompile.duration,
+    project: kompile.project,
+    createdAt: epoch,
+    user: kompile.User.email
   };
 }
 
 function mapKompiles(kompiles) {
   if (!kompiles) return null;
-  console.log(kompiles)
+
   var savedKompiles = _.map(kompiles, kompile => mapKompile(kompile));
 
   return savedKompiles;

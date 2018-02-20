@@ -1,0 +1,3 @@
+Command to get project name : git config --get remote.origin.url | head -n1 | sed 's/.*\///' | sed 's/\.git//'
+Command to get user email : git config --get user.email
+

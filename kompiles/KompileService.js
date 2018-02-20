@@ -18,17 +18,20 @@ function retrieveKompilesByEmail(email) {
   return new Promise((resolve, reject) => {
       kompileRepository.findKompilesByEmail(email)
         .then(kompiles => {
-          resolve(kompileMapper.mapKompiles(kompiles));
+        	console.log(kompiles)
+        	if (!kompiles || kompiles.length == 0) reject({ error: 404 })
+        	else resolve(kompileMapper.mapKompiles(kompiles));
         })
         .catch(err => reject(err));
     });
 }
 
-function retrieveKompilesByGroup(group) {
+function retrieveKompilesByProject(project) {
   return new Promise((resolve, reject) => {
-      kompileRepository.findKompilesByGroup(group)
-        .then(kompilesByUser => {
-          resolve(_.map(kompilesByUser, kompiles=> kompileMapper.mapKompiles(kompiles)));
+      kompileRepository.findKompilesByProject(project)
+        .then(kompiles => {
+        	if (!kompiles || kompiles.length == 0) reject({ error: 404 })
+        	else resolve(kompileMapper.mapKompiles(kompiles));
         })
         .catch(err => reject(err));
     });
@@ -36,8 +39,9 @@ function retrieveKompilesByGroup(group) {
 
 function saveKompile(userId, kompile) {
 	return new Promise((resolve, reject) => {
-      if (!kompile.duration) reject("Duration is not present")
-    	kompileRepository.saveKompile(userId, kompile)
+      	if (!kompile.duration) reject("Duration is not present")
+      	else if(!kompile.user) reject("User is not present")
+    	kompileRepository.saveKompile(kompile)
       	.then(kompile => {
         	resolve(kompileMapper.mapKompile(kompile));
       	})
@@ -47,7 +51,7 @@ function saveKompile(userId, kompile) {
 
 module.exports = {
 	retrieveKompiles: retrieveKompiles,
-  retrieveKompilesByEmail: retrieveKompilesByEmail,
-  retrieveKompilesByGroup: retrieveKompilesByGroup,
+  	retrieveKompilesByEmail: retrieveKompilesByEmail,
+  	retrieveKompilesByProject: retrieveKompilesByProject,
 	saveKompile: saveKompile
 }

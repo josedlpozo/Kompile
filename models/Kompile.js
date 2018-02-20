@@ -3,6 +3,8 @@
 module.exports = (sequelize, DataTypes) => {
   var Kompile = sequelize.define('Kompile', {
     
+    project: DataTypes.STRING,
+
     duration: DataTypes.DOUBLE
 
   });

@@ -7,7 +7,7 @@ function findKompilesByUserId(userId) {
 	return models.Kompile.findAll({
       include: [{
         model: models.User,
-        attributes: ['alias', 'email'],
+        attributes: ['email'],
         where: {
           id : userId
         }
@@ -19,7 +19,7 @@ function findKompilesByEmail(email) {
   return models.Kompile.findAll({
       include: [{
         model: models.User,
-        attributes: ['alias', 'email'],
+        attributes: ['email'],
         where: {
           email : email
         }
@@ -27,30 +27,48 @@ function findKompilesByEmail(email) {
     });
 }
 
-function findKompilesByGroup(group) {
-  return models.User.findAll({
+function findKompilesByProject(project) {
+  return models.Kompile.findAll({
       where: {
-          group : group
-      }
-    }).then(users => Promise.all(_.map(users, user => findKompilesByUserId(user.id))));
+        project: project
+      },
+      include: [{
+        model: models.User,
+        attributes: ['email']
+      }]
+    });
 }
 
-function saveKompile(userId, kompile) {
+function saveKompileByUserId(userId, kompile) {
+  return models.Kompile.create({
+            UserId: userId,
+            project: kompile.project,
+            duration: kompile.duration
+          })
+}
+
+function saveKompile(kompile) {
 	return models.User.findOne({
     	where: {
-      		id : userId
+      		email : kompile.user
     	}
-  	}).then(user => 
-  		models.Kompile.create({
-			 UserId: user.id,
-			 duration: kompile.duration
-		  })
-  	);
+  	}).then(user => {
+      if (!user) {
+        models.User.create({
+          alias: kompile.user,
+          email: kompile.user
+        }).then(user => {
+          saveKompileByUserId(user.id, kompile)
+        })
+      } else {
+        saveKompileByUserId(user.id, kompile)
+      }
+    });
 }
 
 module.exports = {
   findKompilesByUserId: findKompilesByUserId,
   findKompilesByEmail: findKompilesByEmail,
-  findKompilesByGroup: findKompilesByGroup,
+  findKompilesByProject: findKompilesByProject,
   saveKompile: saveKompile
 };
