@@ -50,7 +50,7 @@ function retrieveKompilesByProject(project) {
 
 function saveKompile(kompile) {
 	return new Promise((resolve, reject) => {
-      	if (!kompile.duration) reject("Duration is not present")
+      	if (!kompile.duration || kompile.duration == 0) reject("Duration is not present")
       	else if(!kompile.user) reject("User is not present")
     	kompileRepository.saveKompile(kompile)
       	.then(kompile => {
