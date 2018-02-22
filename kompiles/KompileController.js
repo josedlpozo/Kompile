@@ -11,9 +11,9 @@ router.get('/user/:id/', function(req, res, next) {
     }).catch(err => res.status(500).send({ error: err.toString() }));
 });
 
-router.get('/user', function(req, res, next) {
-  if (!req.query.user) res.status(400).send({ error: 'User is required '})
-  kompileService.retrieveKompilesByEmail(req.query.user)
+router.get('/', function(req, res, next) {
+  if (!req.query.user && !req.query.project) res.status(400).send({ error: 'User or Project is required '})
+  kompileService.retrieveKompilesByEmailAndProject(req.query.user, req.query.project)
     .then(kompiles => {
       if (!kompiles) res.status(404).json({ error: 'Kompiles not found' });
       else res.send(kompiles);
@@ -36,7 +36,7 @@ router.get('/project', function(req, res, next) {
 });
 
 router.post('/create', function(req, res, next) {
-	kompileService.saveKompile(req.params.id, req.body).then(kompile => res.send(kompile))
+	kompileService.saveKompile(req.body).then(kompile => res.send(kompile))
 	.catch(err => res.status(500).send({ error: err.toString() }));
 });
 

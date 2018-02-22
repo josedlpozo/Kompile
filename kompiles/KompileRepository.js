@@ -27,6 +27,21 @@ function findKompilesByEmail(email) {
     });
 }
 
+function findKompilesByEmailAndProject(email, project) {
+  return models.Kompile.findAll({
+      where: {
+        project: project
+      },
+      include: [{
+        model: models.User,
+        attributes: ['email'],
+        where: {
+          email : email
+        }
+      }]
+    });
+}
+
 function findKompilesByProject(project) {
   return models.Kompile.findAll({
       where: {
@@ -55,7 +70,7 @@ function saveKompile(kompile) {
   	}).then(user => {
       if (!user) {
         models.User.create({
-          alias: kompile.user,
+          alias: kompile.alias,
           email: kompile.user
         }).then(user => {
           saveKompileByUserId(user.id, kompile)
@@ -70,5 +85,6 @@ module.exports = {
   findKompilesByUserId: findKompilesByUserId,
   findKompilesByEmail: findKompilesByEmail,
   findKompilesByProject: findKompilesByProject,
+  findKompilesByEmailAndProject: findKompilesByEmailAndProject,
   saveKompile: saveKompile
 };

@@ -14,12 +14,24 @@ function retrieveKompiles(userId) {
   	});
 }
 
+function retrieveKompilesByEmailAndProject(email, project) {
+  if (!email) return retrieveKompilesByProject(project)
+  else if (!project) return retrieveKompilesByEmail(email)
+  else return new Promise((resolve, reject) => {
+      kompileRepository.findKompilesByEmailAndProject(email, project)
+      .then(kompiles => {
+        if (!kompiles || kompiles.length == 0) reject({ error: 404 })
+        else resolve(kompileMapper.mapKompiles(kompiles));
+      }).catch(err => reject(err));
+  });
+}
+
 function retrieveKompilesByEmail(email) {
   return new Promise((resolve, reject) => {
       kompileRepository.findKompilesByEmail(email)
         .then(kompiles => {
-        	if (!kompiles || kompiles.length == 0) reject({ error: 404 })
-        	else resolve(kompileMapper.mapKompiles(kompiles));
+          if (!kompiles || kompiles.length == 0) reject({ error: 404 })
+          else resolve(kompileMapper.mapKompiles(kompiles));
         })
         .catch(err => reject(err));
     });
@@ -36,7 +48,7 @@ function retrieveKompilesByProject(project) {
     });
 }
 
-function saveKompile(userId, kompile) {
+function saveKompile(kompile) {
 	return new Promise((resolve, reject) => {
       	if (!kompile.duration) reject("Duration is not present")
       	else if(!kompile.user) reject("User is not present")
@@ -50,7 +62,8 @@ function saveKompile(userId, kompile) {
 
 module.exports = {
 	retrieveKompiles: retrieveKompiles,
-  	retrieveKompilesByEmail: retrieveKompilesByEmail,
-  	retrieveKompilesByProject: retrieveKompilesByProject,
+  retrieveKompilesByEmail: retrieveKompilesByEmail,
+  retrieveKompilesByProject: retrieveKompilesByProject,
+  retrieveKompilesByEmailAndProject : retrieveKompilesByEmailAndProject,
 	saveKompile: saveKompile
 }
