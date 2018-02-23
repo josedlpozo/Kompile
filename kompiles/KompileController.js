@@ -22,6 +22,17 @@ router.get('/', function(req, res, next) {
       else res.status(500).send({ error: err.toString() })
     });
 });
+router.get('/mean', function(req, res, next) {
+  if (!req.query.user && !req.query.project) res.status(400).send({ error: 'User or Project is required'})
+  kompileService.calculateKompileTimeMeanByEmailAndProject(req.query.user, req.query.project)
+    .then(average => {
+      if (!average) res.status(404).json({ error: 'Average not found' });
+      else res.send(average);
+    }).catch(err => {
+      if (err.error == 404) res.status(404).send({ error: req.query.user + ' user not found'})
+      else res.status(500).send({ error: err.toString() })
+    });
+});
 
 router.get('/project', function(req, res, next) {
   if (!req.query.project) res.status(400).send({ error: 'Project is required '})
