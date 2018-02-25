@@ -4,6 +4,7 @@ var router = express.Router();
 var kompileService = require('./KompileService');
 
 router.get('/', function(req, res, next) {
+  console.log('Call')
   kompileService.retrieveKompilesByEmailAndProject(req.query.user, req.query.project)
     .then(kompiles => res.send(kompiles))
     .catch(err => res.status(err.status).send(err));

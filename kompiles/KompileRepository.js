@@ -79,12 +79,10 @@ function saveKompile(kompile) {
     	}
   	}).then(user => {
       if (!user) {
-        models.User.create({
+        return models.User.create({
           alias: kompile.alias,
           email: kompile.user
-        }).then(user => {
-          return saveKompileByUserId(user.id, kompile)
-        })
+        }).then(user => saveKompileByUserId(user.id, kompile))
       } else {
         return saveKompileByUserId(user.id, kompile)
       }

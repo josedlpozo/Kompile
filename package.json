@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test && mocha --timeout 10000"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -19,6 +19,11 @@
     "sqlite3": "^3.1.13",
     "swagger-ui-express": "^2.0.15",
     "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^2.0.1",
+    "mocha": "^5.0.1"
   },
   "repository": {
     "type": "git",
