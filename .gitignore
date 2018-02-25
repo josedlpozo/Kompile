@@ -27,6 +27,6 @@ build/Release
 node_modules
 
 sessions
-
+test-output
 # Debug log from npm
 npm-debug.log
