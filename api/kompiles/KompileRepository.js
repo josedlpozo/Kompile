@@ -11,6 +11,10 @@ function findKompilesByUserId(userId) {
         where: {
           id : userId
         }
+      }, 
+      {
+        model: models.Project,
+        attributes: ['name']
       }]
   	});
 }
@@ -23,20 +27,28 @@ function findKompilesByEmail(email) {
         where: {
           email : email
         }
+      },
+      {
+        model: models.Project,
+        attributes: ['name']
       }]
     });
 }
 
 function findKompilesByEmailAndProject(email, project) {
   return models.Kompile.findAll({
-      where: {
-        project: project
-      },
       include: [{
         model: models.User,
         attributes: ['email'],
         where: {
           email : email
+        }
+      },
+      {
+        model: models.Project,
+        attributes: ['name'],
+        where: {
+          name: project
         }
       }]
     });
@@ -44,12 +56,16 @@ function findKompilesByEmailAndProject(email, project) {
 
 function findKompilesByProject(project) {
   return models.Kompile.findAll({
-      where: {
-        project: project
-      },
       include: [{
         model: models.User,
         attributes: ['email']
+      },
+      {
+        model: models.Project,
+        attributes: ['name'],
+        where: {
+          name: project
+        }
       }]
     });
 }
@@ -73,20 +89,36 @@ function saveKompileByUserId(userId, kompile) {
 }
 
 function saveKompile(kompile) {
-	return models.User.findOne({
-    	where: {
-      		email : kompile.user
-    	}
-  	}).then(user => {
-      if (!user) {
-        return models.User.create({
-          alias: kompile.alias,
-          email: kompile.user
-        }).then(user => saveKompileByUserId(user.id, kompile))
-      } else {
-        return saveKompileByUserId(user.id, kompile)
+  return models.User.findOrCreate({
+    where: {
+      email: kompile.user
+    },
+    defaults: {
+      alias: kompile.alias
+    }
+  }).spread((user, created) => {
+    return models.Project.findOrCreate({
+      where: {
+        name: kompile.project
       }
+    }).spread((project, created) => {
+      return models.Kompile.create({
+            UserId: user.id,
+            ProjectId: project.id,
+            duration: kompile.duration
+          }).then(kompile => {
+            return models.Kompile.findOne({
+              where: {
+                id: kompile.id
+              },
+              include: [{
+                model: models.User,
+                attributes: ['email']
+              }]
+            })
+          });
     });
+  });
 }
 
 module.exports = {

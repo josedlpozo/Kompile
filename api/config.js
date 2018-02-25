@@ -5,7 +5,7 @@ module.exports = {
   },
   test: {
     dialect: 'sqlite',
-    storage: ':memory:'
+    storage: './db.test.sqlite'
   },
   production: {
     username: 'postgres',

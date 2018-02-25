@@ -9,17 +9,44 @@ let models = require('../models')
 
 chai.use(chaiHttp);
 
+function populateDB(done) {
+  models.User.create({
+        alias: 'kompiler-developer',
+        email: 'kompiler@info.com'
+    }).then(user => {
+        models.Project.create({
+          name: 'kompiler-api'
+    }).then(project => {
+      models.Kompile.create({
+            UserId: user.id,
+            ProjectId: project.id,
+            duration: 200
+      }).then(kompile => {
+        models.Kompile.create({
+            UserId: user.id,
+            ProjectId: project.id,
+            duration: 100
+        }).then(kompile => done())
+      });
+    });
+  });
+}
+
+function clearDB(done) {
+    models.Kompile.destroy({
+      where:{},
+      truncate: true
+    }).then(() => {
+      models.User.destroy({
+        where:{},
+        truncate: true
+      }).then(() => done())
+    })
+}
+
 describe('Kompile list', function() {
 	beforeEach(function(done) {
-		models.Kompile.destroy({
-			where:{},
-			truncate: true
-		});
-		models.User.destroy({
-			where:{},
-			truncate: true
-		});
-		done()
+		clearDB(done);
 	});
 
   	describe('bad requests', function() {
@@ -33,32 +60,23 @@ describe('Kompile list', function() {
           			done();
         		});
     	});
-
-    	it('given an user with no kompiles, should return an empty array', function(done) {
-      		chai.request(server)
-        		.get('/api/v1/kompiles?user=kompiler')
-        		.end(function(err, res) {
-          			res.should.have.status(200);
-          			res.body.should.be.a('array');
-          			res.body.length.should.be.eql(0);
-          			done();
-        		});
-    	});
     });
 
     describe('successful requests', function() {
     	beforeEach(function(done) {
-    		models.User.create({
-    			alias: 'kompiler-developer',
-    			email: 'kompiler@info.com'
-    		}).then(user => {
-    			models.Kompile.create({
-    				UserId: user.id,
-    				project: 'kompiler-api',
-    				duration: 200
-    			}).then(kompile => done())
-    		});
+        populateDB(done)
 		});
+
+      it('given an user with no kompiles, should return an empty array', function(done) {
+          chai.request(server)
+            .get('/api/v1/kompiles?user=kompiler')
+            .end(function(err, res) {
+                res.should.have.status(200);
+                res.body.should.be.a('array');
+                res.body.length.should.be.eql(0);
+                done();
+            });
+      });
 
     	it('given a project with no kompiles, should return an empty array', function(done) {
       		chai.request(server)
@@ -77,7 +95,7 @@ describe('Kompile list', function() {
         		.end(function(err, res) {
           			res.should.have.status(200);
           			res.body.should.be.a('array');
-          			res.body.length.should.be.eql(1);
+          			res.body.length.should.be.eql(2);
           			done();
         		});
     	});
@@ -88,7 +106,7 @@ describe('Kompile list', function() {
         		.end(function(err, res) {
           			res.should.have.status(200);
           			res.body.should.be.a('array');
-          			res.body.length.should.be.eql(1);
+          			res.body.length.should.be.eql(2);
           			done();
         		});
     	});
@@ -99,7 +117,7 @@ describe('Kompile list', function() {
         		.end(function(err, res) {
           			res.should.have.status(200);
           			res.body.should.be.a('array');
-          			res.body.length.should.be.eql(1);
+          			res.body.length.should.be.eql(2);
           			done();
         		});
     	});
@@ -109,15 +127,7 @@ describe('Kompile list', function() {
 
 describe('Kompile save', function() {
 	beforeEach(function(done) {
-		models.Kompile.destroy({
-			where:{},
-			truncate: true
-		});
-		models.User.destroy({
-			where:{},
-			truncate: true
-		});
-		done()
+    clearDB(done);
 	});
 
   	describe('bad requests', function() {
@@ -193,15 +203,7 @@ describe('Kompile save', function() {
 
 describe('Average', function() {
 	beforeEach(function(done) {
-		models.Kompile.destroy({
-			where:{},
-			truncate: true
-		});
-		models.User.destroy({
-			where:{},
-			truncate: true
-		});
-		done()
+		clearDB(done);
 	});
 
   	describe('bad requests', function() {
@@ -241,22 +243,7 @@ describe('Average', function() {
 
     describe('successful requests', function() {
     	beforeEach(function(done) {
-    		models.User.create({
-    			alias: 'kompiler-developer',
-    			email: 'kompiler@info.com'
-    		}).then(user => {
-    			models.Kompile.create({
-    				UserId: user.id,
-    				project: 'kompiler-api',
-    				duration: 200
-    			}).then(kompile => {
-    				models.Kompile.create({
-    					UserId: user.id,
-    					project: 'kompiler-api',
-    					duration: 100
-    				}).then(kompile => done())
-    			})
-    		});
+    		populateDB(done)
 		});
 
     	it('given a project with two kompiles of 200 and 100 of duration, should return an average of 150', function(done) {
