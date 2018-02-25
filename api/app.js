@@ -9,9 +9,6 @@ var swaggerUi = require('swagger-ui-express'),
 
 var kompileController = require('./kompiles/KompileController');
 
-var database = require('./Database');
-database.connect().catch(err => console.log(err));
-
 var app = express();
 
 app.use(logger('dev'));
