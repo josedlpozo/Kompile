@@ -4,16 +4,6 @@ var _ = require('underscore')
 var kompileRepository = require('./KompileRepository');
 var kompileMapper = require('./KompileMapper');
 
-function retrieveKompiles(userId) {
-	return new Promise((resolve, reject) => {
-    	kompileRepository.findKompilesByUserId(userId)
-      	.then(kompiles => {
-        	resolve(kompileMapper.mapKompiles(kompiles));
-      	})
-      	.catch(err => reject(err));
-  	});
-}
-
 function retrieveKompilesByEmailAndProject(email, project) {
   if (!email && !project) return userOrEmailRequired()
   else if (!email) return retrieveKompilesByProject(project)
@@ -70,7 +60,7 @@ function calculateAverage(kompiles) {
   return totalDuration / durations.length
 }
 
-function calculateKompileTimeMeanByEmail(email) {
+function calculateKompileTimeAverageByEmail(email) {
   return new Promise((resolve, reject) => {
       retrieveKompilesByEmail(email)
       .then(kompiles => {
@@ -80,7 +70,7 @@ function calculateKompileTimeMeanByEmail(email) {
   });
 }
 
-function calculateKompileTimeMeanByProject(project) {
+function calculateKompileTimeAverageByProject(project) {
   return new Promise((resolve, reject) => {
       retrieveKompilesByProject(project)
       .then(kompiles => {
@@ -96,7 +86,7 @@ function userOrEmailRequired() {
   });
 }
 
-function calculateKompileTimeMeanByEmailAndProject(email, project) {
+function calculateKompileTimeAverageByEmailAndProject(email, project) {
   if (!email && !project) return userOrEmailRequired()
   else if(!email) return calculateKompileTimeMeanByProject(project)
   else if (!project) return calculateKompileTimeMeanByEmail(email)
@@ -110,10 +100,9 @@ function calculateKompileTimeMeanByEmailAndProject(email, project) {
 }
 
 module.exports = {
-	retrieveKompiles: retrieveKompiles,
-  retrieveKompilesByEmail: retrieveKompilesByEmail,
-  retrieveKompilesByProject: retrieveKompilesByProject,
-  retrieveKompilesByEmailAndProject : retrieveKompilesByEmailAndProject,
-  calculateKompileTimeMeanByEmailAndProject : calculateKompileTimeMeanByEmailAndProject,
+  	retrieveKompilesByEmail: retrieveKompilesByEmail,
+  	retrieveKompilesByProject: retrieveKompilesByProject,
+  	retrieveKompilesByEmailAndProject : retrieveKompilesByEmailAndProject,
+  	calculateKompileTimeAverageByEmailAndProject : calculateKompileTimeAverageByEmailAndProject,
 	saveKompile: saveKompile
 }
