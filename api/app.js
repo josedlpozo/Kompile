@@ -10,6 +10,7 @@ var swaggerUi = require('swagger-ui-express'),
 var kompileController = require('./kompiles/KompileController');
 
 var database = require('./Database');
+database.connect().catch(err => console.log(err));
 
 var app = express();
 
@@ -41,5 +42,4 @@ app.use(function(err, req, res, next) {
   res.send(message);
 });
 
-database.connect().catch(err => console.log(err));
 module.exports = app;
