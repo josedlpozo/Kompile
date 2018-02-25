@@ -13,7 +13,7 @@ function createError(status, message) {
 
 function emailOrProjectIsRequired() {
   return new Promise((resolve, reject) => {
-      reject(createError(400, 'user or projectis required'))
+      reject(createError(400, 'user or project is required'))
   });
 }
 
