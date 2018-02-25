@@ -63,8 +63,9 @@ function retrieveKompilesByProject(project) {
 
 function saveKompile(kompile) {
 	return new Promise((resolve, reject) => {
-      	if (!kompile.duration || kompile.duration == 0) reject(createError(400, 'Duration is required'))
-      	else if(!kompile.user) reject(createError(400, 'User is required'))
+      	if (!kompile.duration || kompile.duration == 0) reject(createError(400, 'duration is required'))
+      	else if(!kompile.user) reject(createError(400, 'user is required'))
+      	else if(!kompile.project) reject(createError(400, 'project is required'))
     	else kompileRepository.saveKompile(kompile)
       		.then(kompile => resolve(kompileMapper.mapKompile(kompile)))
       		.catch(err => reject(err));
@@ -75,6 +76,7 @@ function calculateKompileTimeAverageByEmail(email) {
   return new Promise((resolve, reject) => {
       retrieveKompilesByEmail(email)
       .then(kompiles => {
+      	if (!kompiles || kompiles.length == 0) reject(createError(400, 'Kompiles not found for ' + email))
         let average = calculateAverage(kompiles)
         resolve(kompileMapper.mapAverageUser(email, average))
       }).catch(err => reject(err));
@@ -85,6 +87,7 @@ function calculateKompileTimeAverageByProject(project) {
   return new Promise((resolve, reject) => {
       retrieveKompilesByProject(project)
       .then(kompiles => {
+      	if (!kompiles || kompiles.length == 0) reject(createError(400, 'Kompiles not found for ' + project))
         let average = calculateAverage(kompiles)
         resolve(kompileMapper.mapAverageProject(project, average))
       }).catch(err => reject(err));
@@ -98,6 +101,7 @@ function calculateKompileTimeAverageByEmailAndProject(email, project) {
   else return new Promise((resolve, reject) => {
       retrieveKompilesByEmailAndProject(email, project)
       .then(kompiles => {
+      	if (!kompiles || kompiles.length == 0) reject(createError(400, 'Kompiles not found for ' + email + ' email and ' + project + ' project'))
         let average = calculateAverage(kompiles)
         resolve(kompileMapper.mapAverageUserProject(project, email, average))
       }).catch(err => reject(err));
