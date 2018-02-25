@@ -59,7 +59,17 @@ function saveKompileByUserId(userId, kompile) {
             UserId: userId,
             project: kompile.project,
             duration: kompile.duration
-          })
+          }).then(kompile => {
+            return models.Kompile.findOne({
+              where: {
+                id: kompile.id
+              },
+              include: [{
+                model: models.User,
+                attributes: ['email']
+              }]
+            })
+          });
 }
 
 function saveKompile(kompile) {
@@ -73,10 +83,10 @@ function saveKompile(kompile) {
           alias: kompile.alias,
           email: kompile.user
         }).then(user => {
-          saveKompileByUserId(user.id, kompile)
+          return saveKompileByUserId(user.id, kompile)
         })
       } else {
-        saveKompileByUserId(user.id, kompile)
+        return saveKompileByUserId(user.id, kompile)
       }
     });
 }

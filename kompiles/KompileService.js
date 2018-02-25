@@ -4,14 +4,21 @@ var _ = require('underscore')
 var kompileRepository = require('./KompileRepository');
 var kompileMapper = require('./KompileMapper');
 
+function createError(status, message) {
+	return {
+		status: status,
+		message: message
+	}
+}
+
 function retrieveKompilesByEmailAndProject(email, project) {
-  if (!email && !project) return userOrEmailRequired()
+  if (!email && !project) return emailOrProjectIsRequired()
   else if (!email) return retrieveKompilesByProject(project)
   else if (!project) return retrieveKompilesByEmail(email)
   else return new Promise((resolve, reject) => {
       kompileRepository.findKompilesByEmailAndProject(email, project)
       .then(kompiles => {
-        if (!kompiles || kompiles.length == 0) reject({ error: 404 })
+        if (!kompiles || kompiles.length == 0) reject(createError(404, 'Kompiles not found filtering by ' + email + ' email and project ' + project))
         else resolve(kompileMapper.mapKompiles(kompiles));
       }).catch(err => reject(err));
   });
@@ -21,7 +28,7 @@ function retrieveKompilesByEmail(email) {
   return new Promise((resolve, reject) => {
       kompileRepository.findKompilesByEmail(email)
         .then(kompiles => {
-          if (!kompiles || kompiles.length == 0) reject({ error: 404 })
+          if (!kompiles || kompiles.length == 0) reject(createError(404, 'Kompiles not found filtering by ' + email + ' email'))
           else resolve(kompileMapper.mapKompiles(kompiles));
         })
         .catch(err => reject(err));
@@ -32,7 +39,7 @@ function retrieveKompilesByProject(project) {
   return new Promise((resolve, reject) => {
       kompileRepository.findKompilesByProject(project)
         .then(kompiles => {
-        	if (!kompiles || kompiles.length == 0) reject({ error: 404 })
+        	if (!kompiles || kompiles.length == 0) reject(createError(404, 'Kompiles not found filtering by ' + project + ' project'))
         	else resolve(kompileMapper.mapKompiles(kompiles));
         })
         .catch(err => reject(err));
@@ -41,13 +48,13 @@ function retrieveKompilesByProject(project) {
 
 function saveKompile(kompile) {
 	return new Promise((resolve, reject) => {
-      if (!kompile.duration || kompile.duration == 0) reject("Duration is not present")
-      else if(!kompile.user) reject("User is not present")
+      	if (!kompile.duration || kompile.duration == 0) reject(createError(400, 'Duration is required'))
+      	else if(!kompile.user) reject(createError(400, 'User is required'))
     	else kompileRepository.saveKompile(kompile)
-      	.then(kompile => {
-        	resolve(kompileMapper.mapKompile(kompile));
-      	})
-      	.catch(err => reject(err));
+      		.then(kompile => {
+      			console.log(kompile)
+        		resolve(kompileMapper.mapKompile(kompile));
+      		}).catch(err => reject(err));
   	});
 }
 
@@ -80,16 +87,16 @@ function calculateKompileTimeAverageByProject(project) {
   });
 }
 
-function userOrEmailRequired() {
+function emailOrProjectIsRequired() {
   return new Promise((resolve, reject) => {
-      reject("User or Project is required")
+      reject(createError(400, 'user or projectis required'))
   });
 }
 
 function calculateKompileTimeAverageByEmailAndProject(email, project) {
-  if (!email && !project) return userOrEmailRequired()
-  else if(!email) return calculateKompileTimeMeanByProject(project)
-  else if (!project) return calculateKompileTimeMeanByEmail(email)
+  if (!email && !project) return emailOrProjectIsRequired()
+  else if(!email) return calculateKompileTimeAverageByProject(project)
+  else if (!project) return calculateKompileTimeAverageByEmail(email)
   else return new Promise((resolve, reject) => {
       retrieveKompilesByEmailAndProject(email, project)
       .then(kompiles => {

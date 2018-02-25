@@ -4,8 +4,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var swaggerUi = require('swagger-ui-express'),
+    swaggerDocument = require('./swagger.json');
 
-var userApiController = require('./users/UserApiController');
 var kompileController = require('./kompiles/KompileController');
 
 var database = require('./Database');
@@ -18,8 +19,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser("kompiles"));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/users', userApiController);
-app.use('/api/kompiles', kompileController);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/v1/kompiles', kompileController);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

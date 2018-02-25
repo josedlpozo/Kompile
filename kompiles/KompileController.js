@@ -4,26 +4,20 @@ var router = express.Router();
 var kompileService = require('./KompileService');
 
 router.get('/', function(req, res, next) {
-  if (!req.query.user && !req.query.project) res.status(400).send({ error: 'User or Project is required '})
   kompileService.retrieveKompilesByEmailAndProject(req.query.user, req.query.project)
-    .then(kompiles => {
-      if (!kompiles) res.status(404).json({ error: 'Kompiles not found' });
-      else res.send(kompiles);
-    }).catch(err => res.status(err.status).send(err));
+    .then(kompiles => res.send(kompiles))
+    .catch(err => res.status(err.status).send(err));
 });
 
 router.get('/average', function(req, res, next) {
-  if (!req.query.user && !req.query.project) res.status(400).send({ error: 'User or Project is required'})
-  kompileService.calculateKompileTimeMeanByEmailAndProject(req.query.user, req.query.project)
-    .then(average => {
-      if (!average) res.status(404).json({ error: 'Average not found' });
-      else res.send(average);
-    }).catch(err => res.status(err.status).send(err));
+  kompileService.calculateKompileTimeAverageByEmailAndProject(req.query.user, req.query.project)
+    .then(average => res.send(average))
+    .catch(err => res.status(err.status).send(err));
 });
 
-router.post('/create', function(req, res, next) {
+router.post('/', function(req, res, next) {
 	kompileService.saveKompile(req.body).then(kompile => res.send(kompile))
-	.catch(err => res.status(500).send({ error: err.toString() }));
+	.catch(err => res.status(err.status).send(err));
 });
 
 module.exports = router;

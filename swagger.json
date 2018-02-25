@@ -1,0 +1,200 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.0.1",
+    "title": "Kompiler",
+    "description": "API to register our compile builds time",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "Kompiles",
+      "description": "API for your kompiles times"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/kompiles": {
+      "get": {
+        "tags": [
+          "Kompiles"
+        ],
+        "description": "Kompiles list filtered by user and/or project",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "description": "User email to filter by"
+          },
+          {
+            "name": "project",
+            "in": "query",
+            "description": "Project name to filter by"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Kompiles list filtered by user and/or project",
+            "schema": {
+              "$ref": "#/definitions/Kompiles"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/GenericError"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Kompiles"
+        ],
+        "description": "Create new kompile in system",
+        "parameters": [
+          {
+            "name": "Kompile",
+            "in": "body",
+            "description": "Kompile that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Kompile"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New kompile is created",
+            "schema": {
+              "$ref": "#/definitions/Kompile"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/GenericError"
+            }
+          }
+        }
+      }
+    },
+    "/kompiles/average" : {
+      "get": {
+        "tags": [
+          "Kompiles"
+        ],
+        "description": "Kompile time average filtered by user and/or project",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "description": "User email to filter by"
+          },
+          {
+            "name": "project",
+            "in": "query",
+            "description": "Project name to filter by"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Kompile time average filtered by user and/or project",
+            "schema": {
+              "$ref": "#/definitions/KompileAverage"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/GenericError"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Kompile": {
+      "required": [
+        "user",
+        "project",
+        "duration"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "example": "kompiler-user"
+        },
+        "user": {
+          "type": "string",
+          "uniqueItems": true,
+          "example": "kompiler@gmail.com"
+        },
+        "project": {
+          "type": "string",
+          "example": "kompiler-api"
+        },
+        "duration": {
+          "type": "number",
+          "example": 200,
+          "minimum": 1
+        }
+      }
+    },
+    "Kompiles": {
+      "type": "array",
+      "$ref": "#/definitions/Kompile"
+    },
+    "KompileAverage": {
+      "properties": {
+        "average": {
+          "type": "number",
+          "example": "kompiler-user"
+        },
+        "user": {
+          "type": "string",
+          "example": "kompiler@gmail.com"
+        },
+        "project": {
+          "type": "string",
+          "example": "kompiler-api"
+        }
+      }
+    },
+    "GenericError": {
+      "properties" : {
+        "status": {
+          "type": "number",
+          "example": 400
+        },
+        "message": {
+          "type": "string",
+          "example": "Kompiles not found filtering by kompile-api project"
+        }
+      }
+    }
+  }
+}
