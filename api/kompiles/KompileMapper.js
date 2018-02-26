@@ -27,13 +27,10 @@ function mapKompiles(kompiles) {
 function mapKompileAverage(kompile) {
   if (!kompile) return null;
 
-  let epoch = new Date(kompile.createdAt).getTime()
-  
   return {
     id: kompile.id,
     average: kompile.duration,
     project: kompile.Project.name,
-    createdAt: epoch,
     user: kompile.User.email
   };
 }
@@ -49,13 +46,10 @@ function mapKompilesAverage(kompiles) {
 function mapKompileSum(kompile) {
   if (!kompile) return null;
 
-  let epoch = new Date(kompile.createdAt).getTime()
-  
   return {
     id: kompile.id,
     sum: kompile.duration,
     project: kompile.Project.name,
-    createdAt: epoch,
     user: kompile.User.email
   };
 }
