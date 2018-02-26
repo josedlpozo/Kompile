@@ -72,38 +72,38 @@ function saveKompile(kompile) {
   	});
 }
 
-function calculateKompileTimeAverageByEmail(email) {
+function calculateKompileTimeAverageSummaryByEmail(email) {
   return new Promise((resolve, reject) => {
       retrieveKompilesByEmail(email)
       .then(kompiles => {
       	if (!kompiles || kompiles.length == 0) reject(createError(400, 'Kompiles not found for ' + email))
         let average = calculateAverage(kompiles)
-        resolve(kompileMapper.mapAverageUser(email, average))
+        resolve(kompileMapper.mapAverageSummaryUser(email, average))
       }).catch(err => reject(err));
   });
 }
 
-function calculateKompileTimeAverageByProject(project) {
+function calculateKompileTimeAverageSummaryByProject(project) {
   return new Promise((resolve, reject) => {
       retrieveKompilesByProject(project)
       .then(kompiles => {
       	if (!kompiles || kompiles.length == 0) reject(createError(400, 'Kompiles not found for ' + project))
         let average = calculateAverage(kompiles)
-        resolve(kompileMapper.mapAverageProject(project, average))
+        resolve(kompileMapper.mapAverageSummaryProject(project, average))
       }).catch(err => reject(err));
   });
 }
 
-function calculateKompileTimeAverageByEmailAndProject(email, project) {
+function calculateKompileTimeAverageSummaryByEmailAndProject(email, project) {
   if (!email && !project) return emailOrProjectIsRequired()
-  else if(!email) return calculateKompileTimeAverageByProject(project)
-  else if (!project) return calculateKompileTimeAverageByEmail(email)
+  else if(!email) return calculateKompileTimeAverageSummaryByProject(project)
+  else if (!project) return calculateKompileTimeAverageSummaryByEmail(email)
   else return new Promise((resolve, reject) => {
       retrieveKompilesByEmailAndProject(email, project)
       .then(kompiles => {
       	if (!kompiles || kompiles.length == 0) reject(createError(400, 'Kompiles not found for ' + email + ' email and ' + project + ' project'))
         let average = calculateAverage(kompiles)
-        resolve(kompileMapper.mapAverageUserProject(project, email, average))
+        resolve(kompileMapper.mapAverageSummaryUserProject(project, email, average))
       }).catch(err => reject(err));
   });
 }
@@ -112,6 +112,6 @@ module.exports = {
   	retrieveKompilesByEmail: retrieveKompilesByEmail,
   	retrieveKompilesByProject: retrieveKompilesByProject,
   	retrieveKompilesByEmailAndProject : retrieveKompilesByEmailAndProject,
-  	calculateKompileTimeAverageByEmailAndProject : calculateKompileTimeAverageByEmailAndProject,
+  	calculateKompileTimeAverageSummaryByEmailAndProject : calculateKompileTimeAverageSummaryByEmailAndProject,
 	saveKompile: saveKompile
 }

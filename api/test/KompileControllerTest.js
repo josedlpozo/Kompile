@@ -3,58 +3,15 @@ process.env.NODE_ENV = 'test';
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../app');
+let db = require('./PopulateDB')
 let should = chai.should();
-
-let models = require('../models')
 
 chai.use(chaiHttp);
 
-function populateDB(done) {
-  models.sequelize.sync({
-    force: true
-  }).then(() => {
-    models.User.create({
-        alias: 'kompiler-developer',
-        email: 'kompiler@info.com'
-    }).then(user => {
-        models.Project.create({
-          name: 'kompiler-api'
-    }).then(project => {
-      models.Kompile.create({
-            UserId: user.id,
-            ProjectId: project.id,
-            duration: 200
-      }).then(kompile => {
-        models.Kompile.create({
-            UserId: user.id,
-            ProjectId: project.id,
-            duration: 100
-        }).then(kompile => done())
-      });
-    });
-    })
-  })
-}
-
-function clearDB(done) {
-  models.sequelize.sync({
-    force: true
-  }).then(() => {
-    models.Kompile.destroy({
-      where:{},
-      truncate: true
-    }).then(() => {
-      models.User.destroy({
-        where:{},
-        truncate: true
-      }).then(() => done())
-    })
-  })
-}
 
 describe('Kompile list', function() {
 	beforeEach(function(done) {
-		clearDB(done);
+		db.clearDB(done);
 	});
 
   	describe('bad requests', function() {
@@ -72,7 +29,7 @@ describe('Kompile list', function() {
 
     describe('successful requests', function() {
     	beforeEach(function(done) {
-        populateDB(done)
+        db.populateDB(done)
 		});
 
       it('given an user with no kompiles, should return an empty array', function(done) {
@@ -135,7 +92,7 @@ describe('Kompile list', function() {
 
 describe('Kompile save', function() {
 	beforeEach(function(done) {
-    clearDB(done);
+    db.clearDB(done);
 	});
 
   	describe('bad requests', function() {
@@ -211,13 +168,13 @@ describe('Kompile save', function() {
 
 describe('Average', function() {
 	beforeEach(function(done) {
-		clearDB(done);
+		db.clearDB(done);
 	});
 
   	describe('bad requests', function() {
     	it('no given user or project, should return a bad request', function(done) {
       		chai.request(server)
-        		.get('/api/v1/kompiles/average')
+        		.get('/api/v1/kompiles/average/summary')
         		.end(function(err, res) {
           			res.should.have.status(400);
           			res.body.should.be.a('object');
@@ -228,22 +185,18 @@ describe('Average', function() {
 
     	it('given an user with no kompiles, should return a bad request', function(done) {
       		chai.request(server)
-        		.get('/api/v1/kompiles?user=kompiler')
+        		.get('/api/v1/kompiles/average/summary?user=kompiler')
         		.end(function(err, res) {
-          			res.should.have.status(200);
-          			res.body.should.be.a('array');
-          			res.body.length.should.be.eql(0);
+          			res.should.have.status(400);
           			done();
         		});
     	});
 
     	it('given a project with no kompiles, should return a bad request', function(done) {
       		chai.request(server)
-        		.get('/api/v1/kompiles?project=kompiler')
+        		.get('/api/v1/kompiles/average/summary?project=kompiler')
         		.end(function(err, res) {
-          			res.should.have.status(200);
-          			res.body.should.be.a('array');
-          			res.body.length.should.be.eql(0);
+          			res.should.have.status(400);
           			done();
         		});
     	});
@@ -251,12 +204,12 @@ describe('Average', function() {
 
     describe('successful requests', function() {
     	beforeEach(function(done) {
-    		populateDB(done)
+    		db.populateDB(done)
 		});
 
     	it('given a project with two kompiles of 200 and 100 of duration, should return an average of 150', function(done) {
       		chai.request(server)
-        		.get('/api/v1/kompiles/average?project=kompiler-api')
+        		.get('/api/v1/kompiles/average/summary?project=kompiler-api')
         		.end(function(err, res) {
           			res.should.have.status(200);
           			res.body.should.be.a('object');
@@ -267,7 +220,7 @@ describe('Average', function() {
 
     	it('given a user with two kompiles of 200 and 100 of duration, should return an average of 150', function(done) {
       		chai.request(server)
-        		.get('/api/v1/kompiles/average?user=kompiler@info.com')
+        		.get('/api/v1/kompiles/average/summary?user=kompiler@info.com')
         		.end(function(err, res) {
           			res.should.have.status(200);
           			res.body.should.be.a('object');
@@ -278,7 +231,7 @@ describe('Average', function() {
 
     	it('given a user and project with two kompiles of 200 and 100 of duration, should return an average of 150', function(done) {
       		chai.request(server)
-        		.get('/api/v1/kompiles/average?user=kompiler@info.com&project=kompiler-api')
+        		.get('/api/v1/kompiles/average/summary?user=kompiler@info.com&project=kompiler-api')
         		.end(function(err, res) {
           			res.should.have.status(200);
           			res.body.should.be.a('object');

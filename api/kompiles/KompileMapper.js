@@ -24,21 +24,21 @@ function mapKompiles(kompiles) {
   return savedKompiles;
 }
 
-function mapAverageUser(user, average) {
+function mapAverageSummaryUser(user, average) {
   return {
     user: user,
     average: average
   }
 }
 
-function mapAverageProject(project, average) {
+function mapAverageSummaryProject(project, average) {
   return {
     project: project,
     average: average
   }
 }
 
-function mapAverageUserProject(project, user, average) {
+function mapAverageSummaryUserProject(project, user, average) {
   return {
     project: project,
     user: user,
@@ -49,7 +49,7 @@ function mapAverageUserProject(project, user, average) {
 module.exports = {
   mapKompile: mapKompile,
   mapKompiles: mapKompiles,
-  mapAverageUser: mapAverageUser,
-  mapAverageProject: mapAverageProject,
-  mapAverageUserProject: mapAverageUserProject
+  mapAverageSummaryUser: mapAverageSummaryUser,
+  mapAverageSummaryProject: mapAverageSummaryProject,
+  mapAverageSummaryUserProject: mapAverageSummaryUserProject
 };

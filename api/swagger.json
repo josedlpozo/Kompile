@@ -98,12 +98,12 @@
         }
       }
     },
-    "/kompiles/average" : {
+    "/kompiles/average/summary" : {
       "get": {
         "tags": [
           "Kompiles"
         ],
-        "description": "Kompile time average filtered by user and/or project",
+        "description": "Kompile time average summary filtered by user and/or project",
         "parameters": [
           {
             "name": "user",
