@@ -1,0 +1,40 @@
+{
+  "name": "kompiler",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "nyc mocha --timeout 10000 --exit"
+  },
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "morgan": "~1.9.0",
+    "pg": "^6.4.2",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.23.2",
+    "serve-favicon": "~2.4.5",
+    "sqlite3": "^3.1.13",
+    "swagger-ui-express": "^2.0.15",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^2.0.1",
+    "mocha": "^5.0.1",
+    "mocha-junit-reporter": "^1.17.0",
+    "nyc": "^11.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josedlpozo/kompiler.git"
+  },
+  "author": "josedlpozo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/josedlpozo/kompiler/issues"
+  },
+  "homepage": "https://github.com/josedlpozo/kompiler#readme"
+}

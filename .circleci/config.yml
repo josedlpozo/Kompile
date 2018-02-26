@@ -7,8 +7,9 @@ jobs:
 
     steps:
       - checkout
-      - run: npm install
-      - run: npm install --dev
-      - run: npm test
+      - run: cd api
+      - run: cd api && npm install
+      - run: cd api && npm install --dev
+      - run: cd api && npm test
       - store_test_results:
           path: ~/kompile/test-output/test-results.xml
