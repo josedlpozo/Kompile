@@ -235,6 +235,10 @@
           "type": "number",
           "example": 200,
           "minimum": 1
+        },
+        "createdAt": {
+          "type": "timestamp",
+          "example": 20012719821
         }
       }
     },
