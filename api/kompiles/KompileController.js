@@ -3,8 +3,6 @@ var router = express.Router();
 
 var kompileService = require('./KompileService');
 
-var kompileRepository = require('./KompileRepository');
-
 router.get('/', function(req, res, next) {
   kompileService.retrieveKompilesByEmailAndProject(req.query.user, req.query.project)
     .then(kompiles => res.send(kompiles))
@@ -18,11 +16,15 @@ router.get('/average/summary', function(req, res, next) {
 });
 
 router.get('/average', function(req, res, next) {
-	console.log(req.query.user)
-	kompileRepository.averageByProject(req.query.project).then(kompiles => {
-		console.log(kompiles)
-		res.send('Hola')
-	})
+	kompileService.averageByEmailOrProject(req.query.user, req.query.project).then(kompiles => {
+		res.send(kompiles)
+	}).catch(err => res.status(err.status).send(err));
+});
+
+router.get('/sum', function(req, res, next) {
+	kompileService.sumByEmailOrProject(req.query.user, req.query.project).then(kompiles => {
+		res.send(kompiles)
+	}).catch(err => res.status(err.status).send(err));
 });
 
 router.post('/', function(req, res, next) {

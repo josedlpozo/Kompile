@@ -89,6 +89,7 @@ function saveKompileByUserId(userId, kompile) {
 }
 
 function saveKompile(kompile) {
+  console.log(kompile)
   return models.User.findOrCreate({
     where: {
       email: kompile.user
@@ -114,7 +115,11 @@ function saveKompile(kompile) {
               include: [{
                 model: models.User,
                 attributes: ['email']
-              }]
+              }, {
+                model: models.Project,
+                attributes: ['name']
+              }
+              ]
             })
           });
     });
@@ -123,7 +128,7 @@ function saveKompile(kompile) {
 
 function averageByEmail(email) {
     return models.Kompile.findAll({
-      attributes: [[models.sequelize.fn('AVG', models.sequelize.col('duration')), 'total']],
+      attributes: ['id', 'createdAt', [models.sequelize.fn('AVG', models.sequelize.col('duration')), 'duration']],
       group: ['UserId', 'ProjectId'],
       include: [{
         model: models.User,
@@ -140,7 +145,7 @@ function averageByEmail(email) {
 
 function averageByProject(project) {
     return models.Kompile.findAll({
-      attributes: [[models.sequelize.fn('AVG', models.sequelize.col('duration')), 'total']],
+      attributes: ['id', 'createdAt', [models.sequelize.fn('AVG', models.sequelize.col('duration')), 'duration']],
       group: ['UserId', 'ProjectId'],
       include: [{
         model: models.User,
@@ -155,6 +160,41 @@ function averageByProject(project) {
     });
 }
 
+function sumByEmail(email) {
+    return models.Kompile.findAll({
+      attributes: ['id', 'createdAt', [models.sequelize.fn('SUM', models.sequelize.col('duration')), 'duration']],
+      group: ['UserId', 'ProjectId'],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email'],
+        where: {
+            email: email
+        }
+      }, {
+        model: models.Project,
+        attributes: ['name']
+      }]
+    });
+}
+
+function sumByProject(project) {
+    return models.Kompile.findAll({
+      attributes: ['id', 'createdAt', [models.sequelize.fn('SUM', models.sequelize.col('duration')), 'duration']],
+      group: ['UserId', 'ProjectId'],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email']
+      }, {
+        model: models.Project,
+        attributes: ['name'],
+        where: {
+            name: project
+        }
+      }]
+    });
+}
+
+
 module.exports = {
   findKompilesByUserId: findKompilesByUserId,
   findKompilesByEmail: findKompilesByEmail,
@@ -162,5 +202,7 @@ module.exports = {
   findKompilesByEmailAndProject: findKompilesByEmailAndProject,
   averageByEmail: averageByEmail,
   averageByProject: averageByProject,
+  sumByEmail: sumByEmail,
+  sumByProject: sumByProject,
   saveKompile: saveKompile
 };

@@ -17,6 +17,12 @@ function emailOrProjectIsRequired() {
   });
 }
 
+function emailOrProjectIsRequiredNotBoth() {
+  return new Promise((resolve, reject) => {
+      reject(createError(400, 'user or project is required but not both'))
+  });
+}
+
 function calculateAverage(kompiles) {
   if (!kompiles || kompiles.length == 0) return 0
   let durations = _.map(kompiles, kompile => kompile.duration)
@@ -63,9 +69,9 @@ function retrieveKompilesByProject(project) {
 
 function saveKompile(kompile) {
 	return new Promise((resolve, reject) => {
-      	if (!kompile.duration || kompile.duration == 0) reject(createError(400, 'duration is required'))
-      	else if(!kompile.user) reject(createError(400, 'user is required'))
-      	else if(!kompile.project) reject(createError(400, 'project is required'))
+      if (!kompile.duration || kompile.duration == 0) reject(createError(400, 'duration is required'))
+      else if(!kompile.user) reject(createError(400, 'user is required'))
+      else if(!kompile.project) reject(createError(400, 'project is required'))
     	else kompileRepository.saveKompile(kompile)
       		.then(kompile => resolve(kompileMapper.mapKompile(kompile)))
       		.catch(err => reject(err));
@@ -108,10 +114,66 @@ function calculateKompileTimeAverageSummaryByEmailAndProject(email, project) {
   });
 }
 
+function averageByEmail(email) {
+  return new Promise((resolve, reject) => {
+      kompileRepository.averageByEmail(email)
+      .then(kompiles => {
+        if (!kompiles || kompiles.length == 0) reject(createError(400, 'Kompiles not found for ' + email + ' email'))
+        resolve(kompileMapper.mapKompilesAverage(kompiles))
+      }).catch(err => reject(err));
+  });
+}
+
+function averageByProject(project) {
+  return new Promise((resolve, reject) => {
+      kompileRepository.averageByProject(project)
+      .then(kompiles => {
+        if (!kompiles || kompiles.length == 0) reject(createError(400, 'Kompiles not found for ' + project + ' project'))
+        resolve(kompileMapper.mapKompilesAverage(kompiles))
+      }).catch(err => reject(err));
+  });
+}
+
+function sumByEmail(email) {
+  return new Promise((resolve, reject) => {
+      kompileRepository.sumByEmail(email)
+      .then(kompiles => {
+        if (!kompiles || kompiles.length == 0) reject(createError(400, 'Kompiles not found for ' + email + ' email'))
+        resolve(kompileMapper.mapKompilesSum(kompiles))
+      }).catch(err => reject(err));
+  });
+}
+
+function sumByProject(project) {
+  return new Promise((resolve, reject) => {
+      kompileRepository.sumByProject(project)
+      .then(kompiles => {
+        if (!kompiles || kompiles.length == 0) reject(createError(400, 'Kompiles not found for ' + project + ' project'))
+        resolve(kompileMapper.mapKompilesSum(kompiles))
+      }).catch(err => reject(err));
+  });
+}
+
+function averageByEmailOrProject(email, project) {
+  if (email && project) return emailOrProjectIsRequiredNotBoth()
+  else if(!email && !project) return emailOrProjectIsRequired()
+  else if(!email) return averageByProject(project)
+  else return averageByEmail(email)
+}
+
+function sumByEmailOrProject(email, project) {
+  if (email && project) return emailOrProjectIsRequiredNotBoth()
+  else if(!email && !project) return emailOrProjectIsRequired()
+  else if(!email) return sumByProject(project)
+  else return sumByEmail(email)
+}
+
 module.exports = {
   	retrieveKompilesByEmail: retrieveKompilesByEmail,
   	retrieveKompilesByProject: retrieveKompilesByProject,
   	retrieveKompilesByEmailAndProject : retrieveKompilesByEmailAndProject,
   	calculateKompileTimeAverageSummaryByEmailAndProject : calculateKompileTimeAverageSummaryByEmailAndProject,
-	saveKompile: saveKompile
+    averageByEmailOrProject: averageByEmailOrProject,
+    sumByEmailOrProject: sumByEmailOrProject,
+	  saveKompile: saveKompile
 }

@@ -134,6 +134,80 @@
           }
         }
       }
+    },
+    "/kompiles/average" : {
+      "get": {
+        "tags": [
+          "Kompiles"
+        ],
+        "description": "Kompile time average filtered by user or project",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "description": "User email to filter by"
+          },
+          {
+            "name": "project",
+            "in": "query",
+            "description": "Project name to filter by"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Kompile time average filtered by user or project",
+            "schema": {
+              "$ref": "#/definitions/KompilesAverage"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/GenericError"
+            }
+          }
+        }
+      }
+    },
+    "/kompiles/sum" : {
+      "get": {
+        "tags": [
+          "Kompiles"
+        ],
+        "description": "Kompile time sum filtered by user or project",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "description": "User email to filter by"
+          },
+          {
+            "name": "project",
+            "in": "query",
+            "description": "Project name to filter by"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Kompile time sum filtered by user or project",
+            "schema": {
+              "$ref": "#/definitions/KompilesSum"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/GenericError"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -166,13 +240,16 @@
     },
     "Kompiles": {
       "type": "array",
-      "$ref": "#/definitions/Kompile"
+      "items": {
+        "type": "object",
+        "$ref": "#/definitions/Kompile"
+      }
     },
     "KompileAverage": {
       "properties": {
         "average": {
           "type": "number",
-          "example": "kompiler-user"
+          "example": 200
         },
         "user": {
           "type": "string",
@@ -182,6 +259,36 @@
           "type": "string",
           "example": "kompiler-api"
         }
+      }
+    },
+    "KompilesAverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/definitions/KompileAverage"
+      }
+    },
+    "KompileSum": {
+      "properties": {
+        "sum": {
+          "type": "number",
+          "example": 2000
+        },
+        "user": {
+          "type": "string",
+          "example": "kompiler@gmail.com"
+        },
+        "project": {
+          "type": "string",
+          "example": "kompiler-api"
+        }
+      }
+    },
+    "KompilesSum": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/definitions/KompileSum"
       }
     },
     "GenericError": {
