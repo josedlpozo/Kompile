@@ -10,7 +10,10 @@ let models = require('../models')
 chai.use(chaiHttp);
 
 function populateDB(done) {
-  models.User.create({
+  models.sequelize.sync({
+    force: true
+  }).then(() => {
+    models.User.create({
         alias: 'kompiler-developer',
         email: 'kompiler@info.com'
     }).then(user => {
@@ -29,10 +32,14 @@ function populateDB(done) {
         }).then(kompile => done())
       });
     });
-  });
+    })
+  })
 }
 
 function clearDB(done) {
+  models.sequelize.sync({
+    force: true
+  }).then(() => {
     models.Kompile.destroy({
       where:{},
       truncate: true
@@ -42,6 +49,7 @@ function clearDB(done) {
         truncate: true
       }).then(() => done())
     })
+  })
 }
 
 describe('Kompile list', function() {
