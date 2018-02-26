@@ -121,10 +121,46 @@ function saveKompile(kompile) {
   });
 }
 
+function averageByEmail(email) {
+    return models.Kompile.findAll({
+      attributes: [[models.sequelize.fn('AVG', models.sequelize.col('duration')), 'total']],
+      group: ['UserId', 'ProjectId'],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email'],
+        where: {
+            email: email
+        }
+      }, {
+        model: models.Project,
+        attributes: ['name']
+      }]
+    });
+}
+
+function averageByProject(project) {
+    return models.Kompile.findAll({
+      attributes: [[models.sequelize.fn('AVG', models.sequelize.col('duration')), 'total']],
+      group: ['UserId', 'ProjectId'],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email']
+      }, {
+        model: models.Project,
+        attributes: ['name'],
+        where: {
+            name: project
+        }
+      }]
+    });
+}
+
 module.exports = {
   findKompilesByUserId: findKompilesByUserId,
   findKompilesByEmail: findKompilesByEmail,
   findKompilesByProject: findKompilesByProject,
   findKompilesByEmailAndProject: findKompilesByEmailAndProject,
+  averageByEmail: averageByEmail,
+  averageByProject: averageByProject,
   saveKompile: saveKompile
 };
