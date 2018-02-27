@@ -6,11 +6,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var swaggerUi = require('swagger-ui-express'),
     swaggerDocument = require('./swagger.json');
+var cors = require('cors');
 
 var kompileController = require('./kompiles/KompileController');
 
 var app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
