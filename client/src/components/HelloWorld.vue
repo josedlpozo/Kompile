@@ -1,11 +1,23 @@
 <template>
-  <ul v-if="sums && sums.length">
-    <li v-for="sum of sums">
-      <p><strong>{{sum.user}}</strong></p>
-      <p>{{sum.sum}} segundos</p>
-      <p>{{sum.project}}</p>
-    </li>
-  </ul>
+  <div>
+    <h1>Sum by user and project</h1>
+    <ul v-if="sums && sums.length">
+      <li v-for="sum of sums">
+        <p><strong>{{sum.user}}</strong></p>
+        <p>{{sum.sum}} segundos</p>
+        <p>{{sum.project}}</p>
+      </li>
+    </ul>
+
+    <h1>Average by user and project</h1>
+    <ul v-if="averages && averages.length">
+      <li v-for="average of averages">
+        <p><strong>{{average.user}}</strong></p>
+        <p>{{average.average}} segundos</p>
+        <p>{{average.project}}</p>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -15,22 +27,19 @@ export default {
   data () {
     return {
       sums: [],
-      average: []
+      averages: []
     }
   },
 
   created() {
     axios.get('http://localhost:3000/api/v1/kompiles/sum')
     .then(response => {
-      // JSON responses are automatically parsed.
-      console.log(response)
       this.sums = response.data
     }).catch(e => console.log(e))
 
     axios.get('http://localhost:3000/api/v1/kompiles/average')
     .then(response => {
-      // JSON responses are automatically parsed.
-      this.average = response.data
+      this.averages = response.data
     }).catch(e => console.log(e))
   }
 }
