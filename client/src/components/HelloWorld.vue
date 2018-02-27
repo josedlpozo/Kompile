@@ -1,46 +1,48 @@
 <template>
-  <div>
-    <h1>Sum by user and project</h1>
-    <ul v-if="sums && sums.length">
-      <li v-for="sum of sums">
-        <p><strong>{{sum.user}}</strong></p>
-        <p>{{sum.sum}} segundos</p>
-        <p>{{sum.project}}</p>
-      </li>
-    </ul>
+    <div class="content">
+      <h2>Sum of kompiles time by user/project</h2>
+      <line-chart v-if="sumLoaded" :chart-data="sumTimes" :chart-labels="sumLabels"></line-chart>
 
-    <h1>Average by user and project</h1>
-    <ul v-if="averages && averages.length">
-      <li v-for="average of averages">
-        <p><strong>{{average.user}}</strong></p>
-        <p>{{average.average}} segundos</p>
-        <p>{{average.project}}</p>
-      </li>
-    </ul>
-  </div>
+      <h2>Average of kompiles time by user/project</h2>
+      <line-chart v-if="averageLoaded" :chart-data="averageTimes" :chart-labels="averageLabels"></line-chart>
+    </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
+
+import LineChart from '@/components/LineChart'
+
 export default {
   name: 'HelloWorld',
+  components: {
+    LineChart
+  },
   data () {
     return {
-      sums: [],
-      averages: []
+      sumLoaded: false,
+      averageLoaded: false,
+      sumTimes: [],
+      sumLabels: [],
+      averageTimes: [],
+      averageLabels: []
     }
   },
 
-  created() {
+  created () {
     axios.get('http://localhost:3000/api/v1/kompiles/sum')
-    .then(response => {
-      this.sums = response.data
-    }).catch(e => console.log(e))
+      .then(response => {
+        this.sumTimes = response.data.map(entry => entry.sum)
+        this.sumLabels = response.data.map(entry => entry.user + '/' + entry.project)
+        this.sumLoaded = true
+      }).catch(e => console.log(e))
 
     axios.get('http://localhost:3000/api/v1/kompiles/average')
-    .then(response => {
-      this.averages = response.data
-    }).catch(e => console.log(e))
+      .then(response => {
+        this.averageTimes = response.data.map(entry => entry.average)
+        this.averageLabels = response.data.map(entry => entry.user + '/' + entry.project)
+        this.averageLoaded = true
+      }).catch(e => console.log(e))
   }
 }
 </script>

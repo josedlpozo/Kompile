@@ -1,12 +1,14 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
+    <k-footer></k-footer>
   </div>
 </template>
 
 <script>
+import KFooter from '@/components/Footer'
 export default {
+  components: { KFooter },
   name: 'App'
 }
 </script>
