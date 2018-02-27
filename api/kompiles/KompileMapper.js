@@ -44,7 +44,7 @@ function mapKompilesAverage(kompiles) {
 
 function mapKompileSum(kompile) {
   if (!kompile) return null;
-
+  
   return {
     sum: kompile.duration,
     project: kompile.Project.name,
@@ -88,6 +88,7 @@ module.exports = {
   mapKompilesAverage: mapKompilesAverage,
   mapKompileAverage: mapKompileAverage,
   mapKompilesSum: mapKompilesSum,
+  mapKompileSum: mapKompileSum,
   mapAverageSummaryUser: mapAverageSummaryUser,
   mapAverageSummaryProject: mapAverageSummaryProject,
   mapAverageSummaryUserProject: mapAverageSummaryUserProject
