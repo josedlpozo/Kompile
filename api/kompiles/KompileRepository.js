@@ -125,6 +125,24 @@ function saveKompile(kompile) {
   });
 }
 
+function averageSummaryByEmail(email) {
+    return models.Kompile.findOne({
+      attributes: [[models.sequelize.fn('AVG', models.sequelize.col('duration')), 'duration']],
+      group: ['UserId', 'ProjectId'],
+      order: [['duration', 'DESC']],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email'],
+        where: {
+            email: email
+        }
+      }, {
+        model: models.Project,
+        attributes: ['name']
+      }]
+    });
+}
+
 function averageByEmail(email) {
     return models.Kompile.findAll({
       attributes: [[models.sequelize.fn('AVG', models.sequelize.col('duration')), 'duration']],
@@ -157,6 +175,60 @@ function averageByProject(project) {
         where: {
             name: project
         }
+      }]
+    });
+}
+
+function averageSummaryByProject(project) {
+    return models.Kompile.findOne({
+      attributes: [[models.sequelize.fn('AVG', models.sequelize.col('duration')), 'duration']],
+      group: ['UserId', 'ProjectId'],
+      order: [['duration', 'DESC']],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email']
+      }, {
+        model: models.Project,
+        attributes: ['name'],
+        where: {
+            name: project
+        }
+      }]
+    });
+}
+
+function averageSummaryByEmailAndProject(email, project) {
+    return models.Kompile.findOne({
+      attributes: [[models.sequelize.fn('AVG', models.sequelize.col('duration')), 'duration']],
+      group: ['UserId', 'ProjectId'],
+      order: [['duration', 'DESC']],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email'],
+        where: {
+            email: email
+        }
+      }, {
+        model: models.Project,
+        attributes: ['name'],
+        where: {
+            name: project
+        }
+      }]
+    });
+}
+
+function average() {
+    return models.Kompile.findAll({
+      attributes: [[models.sequelize.fn('AVG', models.sequelize.col('duration')), 'duration']],
+      group: ['UserId', 'ProjectId'],
+      order: [['duration', 'DESC']],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email']
+      }, {
+        model: models.Project,
+        attributes: ['name']
       }]
     });
 }
@@ -197,6 +269,78 @@ function sumByProject(project) {
     });
 }
 
+function sumSummaryByEmail(email) {
+    return models.Kompile.findOne({
+      attributes: [[models.sequelize.fn('SUM', models.sequelize.col('duration')), 'duration']],
+      group: ['UserId', 'ProjectId'],
+      order: [['duration', 'DESC']],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email'],
+        where: {
+            email: email
+        }
+      }, {
+        model: models.Project,
+        attributes: ['name']
+      }]
+    });
+}
+
+function sumSummaryByProject(project) {
+    return models.Kompile.findOne({
+      attributes: [[models.sequelize.fn('SUM', models.sequelize.col('duration')), 'duration']],
+      group: ['UserId', 'ProjectId'],
+      order: [['duration', 'DESC']],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email']
+      }, {
+        model: models.Project,
+        attributes: ['name'],
+        where: {
+            name: project
+        }
+      }]
+    });
+}
+
+function sumSummaryByEmailAndProject(email, project) {
+    return models.Kompile.findOne({
+      attributes: [[models.sequelize.fn('SUM', models.sequelize.col('duration')), 'duration']],
+      group: ['UserId', 'ProjectId'],
+      order: [['duration', 'DESC']],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email'],
+        where: {
+            email: email
+        }
+      }, {
+        model: models.Project,
+        attributes: ['name'],
+        where: {
+            name: project
+        }
+      }]
+    });
+}
+
+function sum() {
+    return models.Kompile.findAll({
+      attributes: [[models.sequelize.fn('SUM', models.sequelize.col('duration')), 'duration']],
+      group: ['UserId', 'ProjectId'],
+      order: [['duration', 'DESC']],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email']
+      }, {
+        model: models.Project,
+        attributes: ['name']
+      }]
+    });
+}
+
 
 module.exports = {
   findKompilesByUserId: findKompilesByUserId,
@@ -207,5 +351,13 @@ module.exports = {
   averageByProject: averageByProject,
   sumByEmail: sumByEmail,
   sumByProject: sumByProject,
-  saveKompile: saveKompile
+  sum: sum,
+  average: average,
+  saveKompile: saveKompile,
+  sumSummaryByProject: sumSummaryByProject,
+  sumSummaryByEmail: sumSummaryByEmail,
+  sumSummaryByEmailAndProject: sumSummaryByEmailAndProject,
+  averageSummaryByProject: averageSummaryByProject,
+  averageSummaryByEmail: averageSummaryByEmail,
+  averageSummaryByEmailAndProject: averageSummaryByEmailAndProject
 };

@@ -46,7 +46,7 @@ describe('Average', function() {
 
         it('given a user and a project, should return a bad request', function(done) {
             chai.request(server)
-                .get('/api/v1/kompiles/average?project=kompiler')
+                .get('/api/v1/kompiles/average?project=kompiler&user=kompiler-developer')
                 .end(function(err, res) {
                     res.should.have.status(400);
                     done();
