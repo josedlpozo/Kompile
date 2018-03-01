@@ -14,7 +14,11 @@
   "tags": [
     {
       "name": "Kompiles",
-      "description": "API for your kompiles times"
+      "description": "Kompiles times endpoints"
+    },
+    {
+      "name": "Users",
+      "description": "Users endpoints"
     }
   ],
   "schemes": [
@@ -245,6 +249,38 @@
           }
         }
       }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Filter users by query",
+        "parameters": [
+          {
+            "name": "prefix",
+            "in": "query",
+            "description": "User email to filter by"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User list",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/GenericError"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -330,6 +366,25 @@
       "items": {
         "type": "object",
         "$ref": "#/definitions/KompileSum"
+      }
+    },
+    "User": {
+      "properties": {
+        "alias": {
+          "type": "string",
+          "example": "kompiler-developer"
+        },
+        "email": {
+          "type": "string",
+          "example": "kompiler@gmail.com"
+        }
+      }
+    },
+    "Users": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/definitions/User"
       }
     },
     "GenericError": {
