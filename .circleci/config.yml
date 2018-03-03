@@ -9,10 +9,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - '{{ checksum  "~kompile/api/package.json" }}'
+            - '{{ checksum  "api/package.json" }}'
       - restore_cache:
           keys:
-            - '{{ checksum "~kompile/client/package.json" }}'
+            - '{{ checksum "client/package.json" }}'
       - run: cd api && npm install
       - run: cd api && npm install --dev
       - run: cd client && npm install
@@ -24,8 +24,8 @@ jobs:
       - save_cache:
           key: '{{ checksum "~kompile/api/package.json" }}'
           paths:
-            - ~/kompiles/api/node_modules
+            - api/node_modules
       - save_cache:
           key: '{{ checksum "~kompile/client/package.json" }}'
           paths:
-            - ~/kompiles/client/node_modules
+            - client/node_modules
