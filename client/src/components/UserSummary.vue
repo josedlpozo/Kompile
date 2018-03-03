@@ -1,57 +1,87 @@
 <template>
-    <div class="content">
+  <div class="content">
+    <div class="row">
+      <h1>User <b>{{ user }}</b></h1>
+      <div class="col s12 m6 l6">
 
-      <h2>Sum of kompiles time by user/project</h2>
-      <line-chart v-if="sumLoaded" :chart-data="sumTimes" :chart-labels="sumLabels"></line-chart>
+        <h4>User summary</h4>
+        <p>There are {{ numberOfProjects }} projects kompiled by this user. He/she has kompiled it {{ numberOfKompiles }} times.</p>
 
-      <h2>Average of kompiles time by user/project</h2>
-      <line-chart v-if="averageLoaded" :chart-data="averageTimes" :chart-labels="averageLabels"></line-chart>
+        <p>He/she has spent {{ totalTimeKompiling }} minutes kompiling. His/her average by kompiling is {{ averageTimeKompiling }} minutes.</p>
+      </div>
+      <div class="col s12 m6 l6">
+        <h4>History</h4>
+        <vertical-line-chart v-if="kompilesLoaded" :chart-data="kompileTimes" :chart-labels="kompileLabels"></vertical-line-chart>
+      </div>
     </div>
+    <div class="row">
+      <div class="col s12 m12 l12">
+        <h4>Average</h4>
+        <horizontal-line-chart v-if="loaded" :chart-data="averageTimes" :chart-labels="averageLabels"></horizontal-line-chart>
+
+        <h4>Sum</h4>
+        <horizontal-line-chart v-if="loaded" :chart-data="sumTimes" :chart-labels="sumLabels"></horizontal-line-chart>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import axios from 'axios'
 
-import LineChart from '@/components/LineChart'
+import api from '../api/ApiClient'
+import dates from '../dates/DateFormatter'
+import VerticalLineChart from '@/components/VerticalLineChart'
+import HorizontalLineChart from '@/components/HorizontalLineChart'
 
 export default {
-  name: 'HelloWorld',
+  name: 'UserSummary',
   components: {
-    LineChart
+    VerticalLineChart,
+    HorizontalLineChart
   },
   data () {
     return {
-      sumLoaded: false,
-      averageLoaded: false,
+      kompilesLoaded: false,
+      loaded: false,
       sumTimes: [],
       sumLabels: [],
       averageTimes: [],
       averageLabels: [],
-      user: ''
+      kompileTimes: [],
+      kompileLabels: [],
+      numberOfProjects: 0,
+      numberOfKompiles: 0,
+      totalTimeKompiling: 0,
+      averageTimeKompiling: 0,
+      project: ''
     }
   },
 
   created () {
     let that = this
     this.user = this.$route.params.user
-    axios.all([getSum(this.user), getAverage(this.user)])
-      .then(axios.spread(function (sum, average) {
-        that.averageTimes = average.data.map(entry => entry.average)
-        that.averageLabels = average.data.map(entry => entry.project)
-        that.averageLoaded = true
+    api.zipSumAverageByUser(this.user, function (sum, average) {
+      that.averageTimes = average.data.map(entry => dates.secondsToMinutes(entry.average))
+      that.averageLabels = average.data.map(entry => entry.project)
 
-        that.sumTimes = sum.data.map(entry => entry.sum)
-        that.sumLabels = sum.data.map(entry => entry.project)
-        that.sumLoaded = true
-      }))
+      that.numberOfProjects = that.averageLabels.length
+
+      that.sumTimes = sum.data.map(entry => dates.secondsToMinutes(entry.sum))
+      that.sumLabels = sum.data.map(entry => entry.project)
+      that.loaded = true
+    })
+
+    api.getKompilesByUser(this.user).then(function (kompiles) {
+      that.kompileTimes = kompiles.data.map(entry => dates.secondsToMinutes(entry.duration))
+      that.kompileLabels = kompiles.data.map(entry => dates.format(entry.createdAt))
+      that.numberOfKompiles = kompiles.data.length
+      that.totalTimeKompiling = dates.secondsToMinutes(kompiles.data.reduce(function (acc, next) {
+        return acc + next.duration
+      }, 0))
+      that.averageTimeKompiling = dates.secondsToMinutes(that.totalTimeKompiling / that.numberOfKompiles)
+      that.kompilesLoaded = true
+    })
   }
-}
-function getSum (user) {
-  return axios.get('http://localhost:3000/api/v1/kompiles/sum?user=' + user)
-}
-
-function getAverage (user) {
-  return axios.get('http://localhost:3000/api/v1/kompiles/average?user=' + user)
 }
 </script>
 

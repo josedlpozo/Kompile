@@ -13,3 +13,4 @@ jobs:
       - run: cd api && npm test
       - store_test_results:
           path: ~/kompile/test-output/test-results.xml
+      - run: cd client && npm test

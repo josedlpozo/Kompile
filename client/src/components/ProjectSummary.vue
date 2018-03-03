@@ -1,32 +1,58 @@
 <template>
-    <div class="content">
+  <div class="content">
+    <div class="row">
+      <h1>Project <b>{{ project }}</b></h1>
+      <div class="col s12 m6 l6">
 
-      <h2>Sum of kompiles time by user/project</h2>
-      <line-chart v-if="sumLoaded" :chart-data="sumTimes" :chart-labels="sumLabels"></line-chart>
+        <h4>Project summary</h4>
+        <p>There are {{ numberOfUsers }} users kompiling this project. They have kompiled it {{ numberOfKompiles }} times.</p>
 
-      <h2>Average of kompiles time by user/project</h2>
-      <line-chart v-if="averageLoaded" :chart-data="averageTimes" :chart-labels="averageLabels"></line-chart>
+        <p>They have spent {{ totalTimeKompiling }} minutes kompiling. Their average by kompiling is {{ averageTimeKompiling }} minutes.</p>
+      </div>
+      <div class="col s12 m6 l6">
+        <h4>History</h4>
+        <vertical-line-chart v-if="kompilesLoaded" :chart-data="kompileTimes" :chart-labels="kompileLabels"></vertical-line-chart>
+      </div>
     </div>
+    <div class="row">
+      <div class="col s12 m12 l12">
+        <h4>Average</h4>
+        <horizontal-line-chart v-if="loaded" :chart-data="averageTimes" :chart-labels="averageLabels"></horizontal-line-chart>
+
+        <h4>Sum</h4>
+        <horizontal-line-chart v-if="loaded" :chart-data="sumTimes" :chart-labels="sumLabels"></horizontal-line-chart>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import axios from 'axios'
 
-import LineChart from '@/components/LineChart'
+import api from '../api/ApiClient'
+import dates from '../dates/DateFormatter'
+import VerticalLineChart from '@/components/VerticalLineChart'
+import HorizontalLineChart from '@/components/HorizontalLineChart'
 
 export default {
-  name: 'HelloWorld',
+  name: 'ProjectSummary',
   components: {
-    LineChart
+    VerticalLineChart,
+    HorizontalLineChart
   },
   data () {
     return {
-      sumLoaded: false,
-      averageLoaded: false,
+      kompilesLoaded: false,
+      loaded: false,
       sumTimes: [],
       sumLabels: [],
       averageTimes: [],
       averageLabels: [],
+      kompileTimes: [],
+      kompileLabels: [],
+      numberOfUsers: 0,
+      numberOfKompiles: 0,
+      totalTimeKompiling: 0,
+      averageTimeKompiling: 0,
       project: ''
     }
   },
@@ -34,28 +60,31 @@ export default {
   created () {
     let that = this
     this.project = this.$route.params.project
-    axios.all([getSum(this.project), getAverage(this.project)])
-      .then(axios.spread(function (sum, average) {
-        that.averageTimes = average.data.map(entry => entry.average)
-        that.averageLabels = average.data.map(entry => entry.user)
-        that.averageLoaded = true
+    api.zipSumAverageByProject(this.project, function (sum, average) {
+      that.averageTimes = average.data.map(entry => dates.secondsToMinutes(entry.average))
+      that.averageLabels = average.data.map(entry => entry.user)
 
-        that.sumTimes = sum.data.map(entry => entry.sum)
-        that.sumLabels = sum.data.map(entry => entry.user)
-        that.sumLoaded = true
-      }))
+      that.numberOfUsers = that.averageLabels.length
+
+      that.sumTimes = sum.data.map(entry => dates.secondsToMinutes(entry.sum))
+      that.sumLabels = sum.data.map(entry => entry.user)
+      that.loaded = true
+    })
+
+    api.getKompilesByProject(this.project).then(function (kompiles) {
+      that.kompileTimes = kompiles.data.map(entry => dates.secondsToMinutes(entry.duration))
+      that.kompileLabels = kompiles.data.map(entry => dates.format(entry.createdAt))
+      that.numberOfKompiles = kompiles.data.length
+      that.totalTimeKompiling = dates.secondsToMinutes(kompiles.data.reduce(function (acc, next) {
+        return acc + next.duration
+      }, 0))
+      that.averageTimeKompiling = dates.secondsToMinutes(that.totalTimeKompiling / that.numberOfKompiles)
+      that.kompilesLoaded = true
+    })
   }
-}
-function getSum (project) {
-  return axios.get('http://localhost:3000/api/v1/kompiles/sum?project=' + project)
-}
-
-function getAverage (project) {
-  return axios.get('http://localhost:3000/api/v1/kompiles/average?project=' + project)
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1, h2 {
   font-weight: normal;
