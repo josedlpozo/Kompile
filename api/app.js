@@ -6,11 +6,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var swaggerUi = require('swagger-ui-express'),
     swaggerDocument = require('./swagger.json');
+var cors = require('cors');
 
 var kompileController = require('./kompiles/KompileController');
+var userController = require('./users/UserController');
+var projectController = require('./projects/ProjectController');
 
 var app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,6 +23,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1/kompiles', kompileController);
+app.use('/api/v1/users', userController);
+app.use('/api/v1/projects', projectController);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

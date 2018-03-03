@@ -21,6 +21,7 @@ function findKompilesByUserId(userId) {
 
 function findKompilesByEmail(email) {
   return models.Kompile.findAll({
+      order: [['createdAt', 'ASC']],
       include: [{
         model: models.User,
         attributes: ['email'],
@@ -37,6 +38,7 @@ function findKompilesByEmail(email) {
 
 function findKompilesByEmailAndProject(email, project) {
   return models.Kompile.findAll({
+      order: [['createdAt', 'ASC']],
       include: [{
         model: models.User,
         attributes: ['email'],
@@ -56,6 +58,7 @@ function findKompilesByEmailAndProject(email, project) {
 
 function findKompilesByProject(project) {
   return models.Kompile.findAll({
+      order: [['createdAt', 'ASC']],
       include: [{
         model: models.User,
         attributes: ['email']
