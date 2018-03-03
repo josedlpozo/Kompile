@@ -1,1 +1,1 @@
-![picture](media/kompilerlogocircle.png | width=200)
+![picture](media/kompilerlogocircle.png)
