@@ -3,6 +3,15 @@
     <div class="col s12 col l4">
       <h4>Filter by user or project</h4>
       <auto-complete :suggestions="suggestions" v-model="selection" @input="onQuery" @enter="enter"></auto-complete>
+
+      <h4>Recent searches</h4>
+      <ul style="width:100%">
+          <li v-for="recent in recents"
+              v-bind:key="recent"
+              @click="enter(recent)">
+            <p>{{ recent.name }} <small>{{ recent.type }}</small></p>
+          </li>
+      </ul>
     </div>
     <div class="col s12 col l8">
       <h4>Sum of kompiles time by user/project</h4>
@@ -35,7 +44,8 @@ export default {
       averageTimes: [],
       averageLabels: [],
       selection: '',
-      suggestions: []
+      suggestions: [],
+      recents: []
     }
   },
 
@@ -51,6 +61,8 @@ export default {
         that.sumLabels = sum.data.map(entry => entry.user + '/' + entry.project)
         that.sumLoaded = true
       }))
+
+    this.recents = this.$store.recents
   },
 
   methods: {
@@ -70,6 +82,7 @@ export default {
         }))
     },
     enter: function (element) {
+      this.$store.commit('ADD', element)
       if (element.type === 'user') {
         this.$router.push({ name: 'UserSummary', params: { user: element.name } })
       } else {

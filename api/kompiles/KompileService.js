@@ -17,6 +17,10 @@ function emailOrProjectIsRequiredNotBoth() {
   });
 }
 
+function orderDesc(kompiles) {
+  return kompiles.sort((sort, other) => other.duration - sort.duration);
+}
+
 function retrieveKompilesByEmailAndProject(email, project) {
   if (!email && !project) return emailOrProjectIsRequired()
   else if (!email) return retrieveKompilesByProject(project)
@@ -98,7 +102,7 @@ function averageByEmail(email) {
       kompileRepository.averageByEmail(email)
       .then(kompiles => {
         if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found for ' + email + ' email'))
-        else resolve(kompileMapper.mapKompilesAverage(kompiles))
+        else resolve(kompileMapper.mapKompilesAverage(orderDesc(kompiles)))
       }).catch(err => reject(err));
   });
 }
@@ -108,7 +112,7 @@ function averageByProject(project) {
       kompileRepository.averageByProject(project)
       .then(kompiles => {
         if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found for ' + project + ' project'))
-        else resolve(kompileMapper.mapKompilesAverage(kompiles))
+        else resolve(kompileMapper.mapKompilesAverage(orderDesc(kompiles)))
       }).catch(err => reject(err));
   });
 }
@@ -118,7 +122,7 @@ function sumByEmail(email) {
       kompileRepository.sumByEmail(email)
       .then(kompiles => {
         if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found for ' + email + ' email'))
-        else resolve(kompileMapper.mapKompilesSum(kompiles))
+        else resolve(kompileMapper.mapKompilesSum(orderDesc(kompiles)))
       }).catch(err => reject(err));
   });
 }
@@ -128,7 +132,7 @@ function sumByProject(project) {
       kompileRepository.sumByProject(project)
       .then(kompiles => {
         if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found for ' + project + ' project'))
-        else resolve(kompileMapper.mapKompilesSum(kompiles))
+        else resolve(kompileMapper.mapKompilesSum(orderDesc(kompiles)))
       }).catch(err => reject(err));
   });
 }
@@ -140,7 +144,7 @@ function averageByEmailOrProject(email, project) {
   else return new Promise((resolve, reject) => {
     kompileRepository.average().then(kompiles => {
       if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found'))
-      else resolve(kompileMapper.mapKompilesAverage(kompiles))
+      else resolve(kompileMapper.mapKompilesAverage(orderDesc(kompiles)))
     }).catch(err => reject(err));
   })
 }
@@ -152,7 +156,7 @@ function sumByEmailOrProject(email, project) {
   else return new Promise((resolve, reject) => {
       kompileRepository.sum().then(kompiles => {
         if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found'))
-        else resolve(kompileMapper.mapKompilesSum(kompiles))
+        else resolve(kompileMapper.mapKompilesSum(orderDesc(kompiles)))
       }).catch(err => reject(err));
   });
 }

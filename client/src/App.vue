@@ -2,10 +2,9 @@
   <div id="app">
     <nav>
       <div class="nav-wrapper">
-        <a href="#" class="brand-logo">Kompiler</a>
+        <a href="/" class="brand-logo">Kompiler</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li><a href="sass.html">About</a></li>
-          <li><a href="collapsible.html">Contribute</a></li>
+          <li><a href="https://github.com/josedlpozo/Kompile">Contribute</a></li>
         </ul>
       </div>
     </nav>
@@ -30,7 +29,7 @@
           </div>
           <div class="footer-copyright">
             <div class="container">
-              © 2018 Copyright Text
+              <a class="grey-text text-lighten-3" href="https://github.com/josedlpozo">josedlpozo</a>
             </div>
           </div>
     </footer>
