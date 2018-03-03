@@ -1,14 +1,44 @@
 <template>
   <div id="app">
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo">Kompiler</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="sass.html">About</a></li>
+          <li><a href="collapsible.html">Contribute</a></li>
+        </ul>
+      </div>
+    </nav>
     <router-view/>
-    <k-footer></k-footer>
+    <footer class="page-footer">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">Kompiler</h5>
+                <p class="grey-text text-lighten-4">Build time counter</p>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Projects</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="https://github.com/josedlpozo/Kompile">Kompile</a></li>
+                  <li><a class="grey-text text-lighten-3" href="https://github.com/josedlpozo/Kompile-Gradle-Plugin">Kompile Gradle plugin</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Kompile iOS plugin</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Kompile maven plugin</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+              © 2018 Copyright Text
+            </div>
+          </div>
+    </footer>
   </div>
 </template>
 
 <script>
-import KFooter from '@/components/Footer'
 export default {
-  components: { KFooter },
   name: 'App'
 }
 </script>
@@ -20,6 +50,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
