@@ -7,7 +7,12 @@ jobs:
 
     steps:
       - checkout
-      - run: cd api
+      - restore_cache:
+          keys:
+            - '{{ checksum  "~kompile/api/package.json" }}'
+      - restore_cache:
+          keys:
+            - '{{ checksum "~kompile/client/package.json" }}'
       - run: cd api && npm install
       - run: cd api && npm install --dev
       - run: cd client && npm install
@@ -16,3 +21,7 @@ jobs:
       - store_test_results:
           path: ~/kompile/test-output/test-results.xml
       - run: cd client && npm test
+      - save_cache:
+          key: '{{ checksum "~kompile/api/package.json" }}'
+      - save_cache:
+          key: '{{ checksum "~kompile/client/package.json" }}'
