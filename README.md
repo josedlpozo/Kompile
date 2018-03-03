@@ -1,0 +1,1 @@
+<img height="100" src="https://github.com/josedlpozo/Kompile/media/kompilerlogocircle.png" width="100">
