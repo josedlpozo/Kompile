@@ -1,1 +1,1 @@
-![picture](media/kompilerlogocircle.png)
+![picture](media/kompilerlogocircle.png =200x)
