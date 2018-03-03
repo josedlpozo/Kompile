@@ -23,5 +23,9 @@ jobs:
       - run: cd client && npm test
       - save_cache:
           key: '{{ checksum "~kompile/api/package.json" }}'
+          paths:
+            - ~/kompiles/api/node_modules
       - save_cache:
           key: '{{ checksum "~kompile/client/package.json" }}'
+          paths:
+            - ~/kompiles/client/node_modules
