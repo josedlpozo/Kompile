@@ -18,6 +18,9 @@ export default HorizontalBar.extend({
           xAxes: [ {
             gridLines: {
               display: false
+            },
+            ticks: {
+              beginAtZero: true
             }
           }]
         },

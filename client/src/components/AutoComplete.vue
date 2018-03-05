@@ -8,7 +8,8 @@
         <ul style="width:100%">
             <li v-for="(suggestion, index) in matches"
                 v-bind:class="{'active': isActive(index)}"
-                v-bind:key=index
+                v-bind:key="index"
+                v-on:mouseover="mouseOver(index)"
                 @click="suggestionClick(index)">
               <p>{{ suggestion.name }} <small>{{ suggestion.type }}</small></p>
             </li>
@@ -54,6 +55,9 @@ export default {
       }
       this.$emit('input', value)
     },
+    mouseOver (index) {
+      this.current = index
+    },
     enter () {
       this.$emit('enter', this.matches[this.current])
       this.open = false
@@ -90,5 +94,8 @@ export default {
 .active {
   background-color: #EF9A9A;
   color: #FFFFFF;
+}
+li { 
+  cursor: pointer; 
 }
 </style>

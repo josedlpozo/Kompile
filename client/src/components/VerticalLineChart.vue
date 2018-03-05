@@ -18,12 +18,16 @@ export default Line.extend({
           xAxes: [ {
             gridLines: {
               display: false
+            },
+            ticks: {
+              beginAtZero: true
             }
           }]
         },
         legend: {
           display: false
         },
+        beginAtZero: true,
         responsive: true,
         maintainAspectRatio: false
       }
