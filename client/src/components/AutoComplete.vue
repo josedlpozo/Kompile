@@ -95,7 +95,7 @@ export default {
   background-color: #EF9A9A;
   color: #FFFFFF;
 }
-li { 
-  cursor: pointer; 
+li {
+  cursor: pointer;
 }
 </style>

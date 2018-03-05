@@ -19,6 +19,10 @@
     {
       "name": "Users",
       "description": "Users endpoints"
+    },
+    {
+      "name": "Projects",
+      "description": "Projects endpoints"
     }
   ],
   "schemes": [
@@ -281,6 +285,38 @@
           }
         }
       }
+    },
+    "/projects": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "description": "Filter projects by query",
+        "parameters": [
+          {
+            "name": "prefix",
+            "in": "query",
+            "description": "Project name to filter by"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Project list",
+            "schema": {
+              "$ref": "#/definitions/Projects"
+            }
+          },
+          "default": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/GenericError"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -385,6 +421,21 @@
       "items": {
         "type": "object",
         "$ref": "#/definitions/User"
+      }
+    },
+    "Project": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "kompiler-api"
+        }
+      }
+    },
+    "Projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$ref": "#/definitions/Project"
       }
     },
     "GenericError": {

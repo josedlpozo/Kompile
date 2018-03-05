@@ -1,11 +1,33 @@
 ![picture](media/kompilerlogocircle200.png)
 
-# Kompiler
+[![CircleCI](https://circleci.com/gh/josedlpozo/Kompile.svg?style=svg&circle-token=79635e38c00a11a2e479fb6331c20f4f617dabf3)](https://circleci.com/gh/josedlpozo/Kompile)
+
+# Kompile
+
+Kompile is a simple web application to know how much time you spend kompiling every day. It is splitted in two different parts, an API which is in charge to save the kompiling times and a web application which is the frontend of the application.
+
+API is written in NodeJS and the web application is built with VueJS.
+
+This project is done to have fun comparing teammates build times and laugh at the slowest :smiley:
+
+## How to deploy?
+
+WORK IN PROGRESS
+
+## How to calculate build time?
+
+This depends on which technology you are using in your project. Kompile has some related projects to calculate it in an easy way. We are open to add some related projects to measure build times in different technologies and then send it to Kompile API.
+
+
+## Related projects
+
+- [Kompile Gradle Plugin](https://github.com/josedlpozo/Kompile-Gradle-Plugin)
+
 
 
 # License
 
-    Copyright (C) 2017 josedlpozo
+    Copyright (C) 2018 josedlpozo
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
