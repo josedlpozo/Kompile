@@ -1,1 +1,1 @@
-CREATE DATABASE example;
+CREATE DATABASE kompile;
