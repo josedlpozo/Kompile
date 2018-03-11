@@ -30,7 +30,7 @@ function retrieveKompilesByEmailAndProject(email, project) {
       .then(kompiles => {
         if (!kompiles) reject(error.createError(404, 'Kompiles not found filtering by ' + email + ' email and project ' + project))
         else resolve(kompileMapper.mapKompiles(kompiles));
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 
@@ -41,7 +41,7 @@ function retrieveKompilesByEmail(email) {
           if (!kompiles) reject(error.createError(404, 'Kompiles not found filtering by ' + email + ' email'))
           else resolve(kompileMapper.mapKompiles(kompiles));
         })
-        .catch(err => reject(err));
+        .catch(err => reject(error.unknownError(err)));
     });
 }
 
@@ -52,7 +52,7 @@ function retrieveKompilesByProject(project) {
         	if (!kompiles) reject(error.createError(404, 'Kompiles not found filtering by ' + project + ' project'))
         	else resolve(kompileMapper.mapKompiles(kompiles));
         })
-        .catch(err => reject(err));
+        .catch(err => reject(error.unknownError(err)));
     });
 }
 
@@ -63,7 +63,7 @@ function saveKompile(kompile) {
       else if(!kompile.project) reject(error.createError(400, 'project is required'))
     	else kompileRepository.saveKompile(kompile)
       		.then(kompile => resolve(kompileMapper.mapKompile(kompile)))
-      		.catch(err => reject(err));
+      		.catch(err => reject(error.unknownError(err)));
   	});
 }
 
@@ -72,7 +72,7 @@ function averageSummaryByEmail(email) {
       kompileRepository.averageSummaryByEmail(email).then(kompile => {
       	if (!kompile) reject(error.createError(400, 'Kompiles not found for ' + email))
         resolve(kompileMapper.mapKompileAverage(kompile))
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 
@@ -81,7 +81,7 @@ function averageSummaryByProject(project) {
       kompileRepository.averageSummaryByProject(project).then(kompile => {
       	if (!kompile) reject(error.createError(400, 'Kompiles not found for ' + project))
         resolve(kompileMapper.mapKompileAverage(kompile))
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 
@@ -93,7 +93,7 @@ function averageSummaryByEmailAndProject(email, project) {
       kompileRepository.averageSummaryByEmailAndProject(email, project).then(kompile => {
       	if (!kompile) reject(error.createError(400, 'Kompiles not found for ' + email + ' email and ' + project + ' project'))
         resolve(kompileMapper.mapKompileAverage(kompile))
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 
@@ -103,7 +103,7 @@ function averageByEmail(email) {
       .then(kompiles => {
         if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found for ' + email + ' email'))
         else resolve(kompileMapper.mapKompilesAverage(orderDesc(kompiles)))
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 
@@ -113,7 +113,7 @@ function averageByProject(project) {
       .then(kompiles => {
         if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found for ' + project + ' project'))
         else resolve(kompileMapper.mapKompilesAverage(orderDesc(kompiles)))
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 
@@ -123,7 +123,7 @@ function sumByEmail(email) {
       .then(kompiles => {
         if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found for ' + email + ' email'))
         else resolve(kompileMapper.mapKompilesSum(orderDesc(kompiles)))
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 
@@ -133,7 +133,7 @@ function sumByProject(project) {
       .then(kompiles => {
         if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found for ' + project + ' project'))
         else resolve(kompileMapper.mapKompilesSum(orderDesc(kompiles)))
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 
@@ -145,7 +145,7 @@ function averageByEmailOrProject(email, project) {
     kompileRepository.average().then(kompiles => {
       if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found'))
       else resolve(kompileMapper.mapKompilesAverage(orderDesc(kompiles)))
-    }).catch(err => reject(err));
+    }).catch(err => reject(error.unknownError(err)));
   })
 }
 
@@ -157,7 +157,7 @@ function sumByEmailOrProject(email, project) {
       kompileRepository.sum().then(kompiles => {
         if (!kompiles || kompiles.length == 0) reject(error.createError(400, 'Kompiles not found'))
         else resolve(kompileMapper.mapKompilesSum(orderDesc(kompiles)))
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 
@@ -166,7 +166,7 @@ function sumSummaryByEmail(email) {
       kompileRepository.sumSummaryByEmail(email).then(kompile => {
         if (!kompile) reject(error.createError(400, 'Kompiles not found for ' + email))
         resolve(kompileMapper.mapKompileSum(kompile))
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 
@@ -175,7 +175,7 @@ function sumSummaryByProject(project) {
       kompileRepository.sumSummaryByProject(project).then(kompile => {
         if (!kompile) reject(error.createError(400, 'Kompiles not found for ' + project))
         resolve(kompileMapper.mapKompileSum(kompile))
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 
@@ -187,7 +187,7 @@ function sumSummaryByEmailAndProject(email, project) {
       kompileRepository.sumSummaryByEmailAndProject(email, project).then(kompile => {
         if (!kompile) reject(error.createError(400, 'Kompiles not found for ' + email + ' email and ' + project + ' project'))
         resolve(kompileMapper.mapKompileSum(kompile))
-      }).catch(err => reject(err));
+      }).catch(err => reject(error.unknownError(err)));
   });
 }
 

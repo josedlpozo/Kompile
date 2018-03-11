@@ -27,10 +27,10 @@ services:
     container_name: web
     build: ./client
     ports:
-      - '8080:8080'
+      - '80:80'
     environment:
-      - PORT=8080
+      - PORT=80
       - NODE_ENV=production
-      - API_URL=http://api:3000
-    links:
+      - API_URL=http://api
+    depends_on:
       - api

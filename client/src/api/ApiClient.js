@@ -1,6 +1,6 @@
 let axios = require('axios')
 
-let host = process.env.API_URL + '/api/v1/'
+let host = 'http://localhost:3000/api/v1/'
 
 function getSum () {
   return axios.get(host + 'kompiles/sum')
