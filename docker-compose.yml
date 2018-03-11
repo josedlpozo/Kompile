@@ -17,7 +17,6 @@ services:
     environment:
       - PORT=8080
       - NODE_ENV=production
-      - API_URL=http://api
     depends_on:
       - api
     links:

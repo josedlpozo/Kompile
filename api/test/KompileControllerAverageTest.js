@@ -15,34 +15,6 @@ describe('Average', function() {
     });
 
     describe('bad requests', function() {
-        it('no given user or project, should return a bad request', function(done) {
-            chai.request(server)
-                .get('/api/v1/kompiles/average')
-                .end(function(err, res) {
-                    res.should.have.status(400);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('message');
-                    done();
-                });
-        });
-
-        it('given an user with no kompiles, should return a bad request', function(done) {
-            chai.request(server)
-                .get('/api/v1/kompiles/average?user=kompiler')
-                .end(function(err, res) {
-                    res.should.have.status(400);
-                    done();
-                });
-        });
-
-        it('given a project with no kompiles, should return a bad request', function(done) {
-            chai.request(server)
-                .get('/api/v1/kompiles/average?project=kompiler')
-                .end(function(err, res) {
-                    res.should.have.status(400);
-                    done();
-                });
-        });
 
         it('given a user and a project, should return a bad request', function(done) {
             chai.request(server)
@@ -54,10 +26,48 @@ describe('Average', function() {
         });
     });
 
+    describe('empty database', function() {
+
+        it('no given user or project, should return a bad request', function(done) {
+            chai.request(server)
+                .get('/api/v1/kompiles/average')
+                .end(function(err, res) {
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(0);
+                    done();
+                });
+        });
+
+        it('given an user with no kompiles, should return a bad request', function(done) {
+            chai.request(server)
+                .get('/api/v1/kompiles/average?user=kompiler')
+                .end(function(err, res) {
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(0);
+                    done();
+                });
+        });
+
+        it('given a project with no kompiles, should return a bad request', function(done) {
+            chai.request(server)
+                .get('/api/v1/kompiles/average?project=kompiler')
+                .end(function(err, res) {
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(0);
+                    done();
+                });
+        });
+    });
+
     describe('successful requests', function() {
         beforeEach(function(done) {
             db.populateDB(done)
         });
+
+        
 
         it('given a project with two kompiles of 200 and 100 of duration, should return an average of 150', function(done) {
             chai.request(server)
