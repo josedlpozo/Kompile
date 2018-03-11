@@ -10,6 +10,8 @@ API is written in NodeJS and the web application is built with VueJS.
 
 This project is done to have fun comparing teammates build times and laugh at the slowest :smiley:
 
+![gif](media/kompile.gif)
+
 ## How to deploy?
 
 ### Docker
