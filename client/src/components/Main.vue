@@ -14,17 +14,18 @@
       </ul>-->
     </div>
     <div class="col s12 col l8">
-      <h4>Sum of kompiles time by user/project</h4>
-      <horizontal-line-chart v-if="sumLoaded" :chart-data="sumTimes" :chart-labels="sumLabels"></horizontal-line-chart>
-
       <h4>Average of kompiles time by user/project</h4>
       <horizontal-line-chart v-if="averageLoaded" :chart-data="averageTimes" :chart-labels="averageLabels"></horizontal-line-chart>
+
+      <h4>Sum of kompiles time by user/project</h4>
+      <horizontal-line-chart v-if="sumLoaded" :chart-data="sumTimes" :chart-labels="sumLabels"></horizontal-line-chart>
     </div>
   </div>
 </template>
 
 <script>
 
+import dates from '../dates/DateFormatter'
 import api from '../api/ApiClient'
 import HorizontalLineChart from '@/components/HorizontalLineChart'
 import AutoComplete from '@/components/AutoComplete'
@@ -52,11 +53,11 @@ export default {
   created () {
     let that = this
     api.zipSumAverage(function (sum, average) {
-      that.averageTimes = average.data.map(entry => entry.average)
+      that.averageTimes = average.data.map(entry => dates.secondsToMinutes(entry.average))
       that.averageLabels = average.data.map(entry => entry.user + '/' + entry.project)
       that.averageLoaded = true
 
-      that.sumTimes = sum.data.map(entry => entry.sum)
+      that.sumTimes = sum.data.map(entry => dates.secondsToMinutes(entry.sum))
       that.sumLabels = sum.data.map(entry => entry.user + '/' + entry.project)
       that.sumLoaded = true
     })

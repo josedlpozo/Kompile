@@ -78,7 +78,7 @@ export default {
       that.totalTimeKompiling = dates.secondsToMinutes(kompiles.data.reduce(function (acc, next) {
         return acc + next.duration
       }, 0))
-      that.averageTimeKompiling = dates.secondsToMinutes(that.totalTimeKompiling / that.numberOfKompiles)
+      that.averageTimeKompiling = (that.totalTimeKompiling / that.numberOfKompiles).toFixed(2)
       that.kompilesLoaded = true
     })
   }
