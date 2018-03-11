@@ -9,8 +9,6 @@ services:
     environment:
       - PORT=8080
       - NODE_ENV=production
-    depends_on:
-      - nginx
   web:
     container_name: web
     build: ./client
