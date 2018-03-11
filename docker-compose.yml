@@ -5,20 +5,28 @@ services:
     container_name: api
     build: ./api
     ports:
-      - '8080:8080'
+      - '3000:3000'
     environment:
       - PORT=8080
       - NODE_ENV=production
+    depends_on:
+      - nginx
   web:
     container_name: web
     build: ./client
     ports:
-      - '80:80'
+      - '8080:8080'
     environment:
-      - PORT=80
+      - PORT=8080
       - NODE_ENV=production
       - API_URL=http://api
     depends_on:
+      - nginx
       - api
     links:
       - api
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    ports:
+      - '80:80'
