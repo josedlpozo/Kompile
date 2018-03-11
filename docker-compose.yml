@@ -4,8 +4,6 @@ services:
   api:
     container_name: api
     build: ./api
-    volumes:
-      - "./db:/usr/src/app/db.production.sqlite"
     ports:
       - '3000:3000'
     environment:
