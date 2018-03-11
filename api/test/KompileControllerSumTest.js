@@ -14,13 +14,24 @@ describe('Sum', function() {
     });
 
     describe('bad requests', function() {
+        it('given a user and a project, should return a bad request', function(done) {
+            chai.request(server)
+                .get('/api/v1/kompiles/sum?project=kompiler&user=kompiler@gmail.com')
+                .end(function(err, res) {
+                    res.should.have.status(400);
+                    done();
+                });
+        });
+    });
+
+    describe('empty database', function() {
         it('no given user or project, should return a bad request', function(done) {
             chai.request(server)
                 .get('/api/v1/kompiles/sum')
                 .end(function(err, res) {
-                    res.should.have.status(400);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('message');
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(0);
                     done();
                 });
         });
@@ -29,7 +40,9 @@ describe('Sum', function() {
             chai.request(server)
                 .get('/api/v1/kompiles/sum?user=kompiler')
                 .end(function(err, res) {
-                    res.should.have.status(400);
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(0);
                     done();
                 });
         });
@@ -38,16 +51,9 @@ describe('Sum', function() {
             chai.request(server)
                 .get('/api/v1/kompiles/sum?project=kompiler')
                 .end(function(err, res) {
-                    res.should.have.status(400);
-                    done();
-                });
-        });
-
-        it('given a user and a project, should return a bad request', function(done) {
-            chai.request(server)
-                .get('/api/v1/kompiles/sum?project=kompiler')
-                .end(function(err, res) {
-                    res.should.have.status(400);
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    res.body.length.should.be.eql(0);
                     done();
                 });
         });
