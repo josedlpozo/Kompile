@@ -20,3 +20,5 @@ services:
       - API_URL=http://api
     depends_on:
       - api
+    links:
+      - api

@@ -6,8 +6,8 @@ COPY package*.json ./
 
 RUN npm install --only=production
 
-RUN npm install -i pm2
+RUN npm install -g pm2
 
 COPY . .
 
-CMD [ "npm", "start" ]
+CMD pm2 start bin/www --no-daemon
