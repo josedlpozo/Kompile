@@ -28,5 +28,8 @@ services:
   nginx:
     container_name: nginx
     build: ./nginx
+    links:
+      - api
+      - web
     ports:
       - '80:80'
