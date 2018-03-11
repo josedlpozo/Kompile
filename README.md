@@ -12,7 +12,25 @@ This project is done to have fun comparing teammates build times and laugh at th
 
 ## How to deploy?
 
-WORK IN PROGRESS
+### Docker
+
+Docker is used to deploy this project.
+
+#### Requirements 
+- Docker
+
+#### Run
+- ./scripts/start.sh
+
+This script runs this two commands to initialize docker containers:
+- docker-compose build
+- docker-compose up -d
+
+#### Update version
+
+- ./scripts/update.sh
+
+This script save the already created sqlite database and restart docker containers
 
 ## How to calculate build time?
 
