@@ -7,7 +7,7 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - PORT=8080
+      - PORT=3000
       - NODE_ENV=production
   web:
     container_name: web
