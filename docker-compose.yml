@@ -5,7 +5,7 @@ services:
     container_name: api
     build: ./api
     volumes:
-      - "./db:/usr/src/app/db.production.sqlite"
+      - ${PWD}/api/db.production.sqlite:/usr/src/app/api/db.production.sqlite
     ports:
       - '3000:3000'
     environment:
@@ -19,7 +19,6 @@ services:
     environment:
       - PORT=8080
       - NODE_ENV=production
-      - API_URL=http://api
     depends_on:
       - api
     links:
