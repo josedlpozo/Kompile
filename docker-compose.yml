@@ -21,7 +21,6 @@ services:
       - NODE_ENV=production
       - API_URL=http://api
     depends_on:
-      - nginx
       - api
     links:
       - api
