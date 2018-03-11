@@ -37,12 +37,12 @@ export default HorizontalBar.extend({
       labels: this.chartLabels,
       datasets: [
         {
-          label: 'Total time',
+          label: 'Minutes',
           borderColor: '#EF9A9A',
           pointBackgroundColor: 'white',
           borderWidth: 1,
           pointBorderColor: '#EF9A9A',
-          backgroundColor: '#E57373',
+          backgroundColor: '#EF9A9A',
           data: this.chartData
         }
       ]

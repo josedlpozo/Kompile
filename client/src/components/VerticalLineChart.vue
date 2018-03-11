@@ -38,7 +38,7 @@ export default Line.extend({
       labels: this.chartLabels,
       datasets: [
         {
-          label: 'Total time',
+          label: 'Minutes',
           borderColor: '#EF9A9A',
           pointBackgroundColor: 'white',
           borderWidth: 1,

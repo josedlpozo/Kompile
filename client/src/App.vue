@@ -21,8 +21,8 @@
                 <ul>
                   <li><a class="grey-text text-lighten-3" href="https://github.com/josedlpozo/Kompile">Kompile</a></li>
                   <li><a class="grey-text text-lighten-3" href="https://github.com/josedlpozo/Kompile-Gradle-Plugin">Kompile Gradle plugin</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Kompile iOS plugin</a></li>
-                  <li><a class="grey-text text-lighten-3" href="#!">Kompile maven plugin</a></li>
+                  <!--<li><a class="grey-text text-lighten-3" href="#!">Kompile iOS plugin</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Kompile maven plugin</a></li>-->
                 </ul>
               </div>
             </div>
