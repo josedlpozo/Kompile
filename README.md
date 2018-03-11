@@ -4,7 +4,7 @@
 
 # Kompile
 
-Kompile is a simple web application to know how much time you spend kompiling every day. It is splitted in two different parts, an API which is in charge to save the kompiling times and a web application which is the frontend of the application.
+Kompile is a simple web application to know how much time you spend kompiling every day. It is split in two different parts, an API which is in charge to save the kompiling times and a web application which is the frontend of the application.
 
 API is written in NodeJS and the web application is built with VueJS.
 
@@ -24,7 +24,7 @@ Docker is used to deploy this project.
 #### Run
 - ./scripts/start.sh
 
-This script runs this two commands to initialize docker containers:
+This script runs these two commands to initialize Dockers containers:
 - docker-compose build
 - docker-compose up -d
 
@@ -32,7 +32,7 @@ This script runs this two commands to initialize docker containers:
 
 - ./scripts/update.sh
 
-This script save the already created sqlite database and restart docker containers
+This script saves the already created sqlite database and restart Dockers containers
 
 ## How to calculate build time?
 
