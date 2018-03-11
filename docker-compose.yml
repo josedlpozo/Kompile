@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  api:
+    container_name: api
+    build: ./api
+    ports:
+      - '3000:3000'
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+  web:
+    container_name: web
+    build: ./client
+    ports:
+      - '8080:8080'
+    environment:
+      - PORT=8080
+      - NODE_ENV=production
+      - API_URL=http://api
+    depends_on:
+      - api
+    links:
+      - api
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    links:
+      - api
+      - web
+    ports:
+      - '80:80'

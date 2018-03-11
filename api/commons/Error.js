@@ -7,6 +7,14 @@ function createError(status, message) {
 	}
 }
 
+function unknownError(error) {
+	return {
+		status: 500,
+		message: error
+	}
+}
+
 module.exports = {
-	createError: createError
+	createError: createError,
+	unknownError: unknownError
 }
