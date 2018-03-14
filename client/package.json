@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Kompile time API client",
   "author": "Jose del Pozo <josedlpozo@gmail.com>",
   "private": true,
