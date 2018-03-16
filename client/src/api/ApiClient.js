@@ -18,6 +18,10 @@ function getProjects (prefix) {
   return axios.get(host + 'projects?prefix=' + prefix)
 }
 
+function getRecords (project) {
+  return axios.get(host + 'kompiles/project/' + project + '/record')
+}
+
 function mergeUsersAndProjects (query, callback) {
   return axios.all([getUsers(query), getProjects(query)]).then(axios.spread(callback))
 }
@@ -72,5 +76,6 @@ module.exports = {
   zipSumAverageByProject: zipSumAverageByProject,
   zipSumAverageByUser: zipSumAverageByUser,
   getKompilesByProject: getKompilesByProject,
-  getKompilesByUser: getKompilesByUser
+  getKompilesByUser: getKompilesByUser,
+  getRecords: getRecords
 }

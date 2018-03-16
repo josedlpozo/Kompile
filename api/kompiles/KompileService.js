@@ -191,6 +191,21 @@ function sumSummaryByEmailAndProject(email, project) {
   });
 }
 
+function recordByProject(project) {
+  if (!project) return emailOrProjectIsRequired()
+  return new Promise((resolve, reject) => {
+      kompileRepository.fastestByProject(project).then(fastest => {
+        kompileRepository.slowestByProject(project).then(slowest => {
+          resolve({
+            fastest: kompileMapper.mapKompile(fastest),
+            slowest: kompileMapper.mapKompile(slowest)
+          })
+        }).catch(err => reject(error.unknownError(err)));
+      }).catch(err => reject(error.unknownError(err)));
+
+  });
+}
+
 module.exports = {
   	retrieveKompilesByEmail: retrieveKompilesByEmail,
   	retrieveKompilesByProject: retrieveKompilesByProject,
@@ -199,5 +214,6 @@ module.exports = {
     sumSummaryByEmailAndProject : sumSummaryByEmailAndProject,
     averageByEmailOrProject: averageByEmailOrProject,
     sumByEmailOrProject: sumByEmailOrProject,
-	  saveKompile: saveKompile
+	  saveKompile: saveKompile,
+    recordByProject: recordByProject
 }
