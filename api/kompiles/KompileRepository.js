@@ -344,6 +344,38 @@ function sum() {
     });
 }
 
+function fastestByProject(project) {
+  return models.Kompile.findOne({
+      order: [['duration', 'ASC']],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email']
+      }, {
+        model: models.Project,
+        attributes: ['name'],
+        where: {
+            name: project
+        }
+      }]
+    });
+}
+
+function slowestByProject(project) {
+  return models.Kompile.findOne({
+      order: [['duration', 'DESC']],
+      include: [{
+        model: models.User,
+        attributes: ['alias', 'email']
+      }, {
+        model: models.Project,
+        attributes: ['name'],
+        where: {
+            name: project
+        }
+      }]
+    });
+}
+
 
 module.exports = {
   findKompilesByUserId: findKompilesByUserId,
@@ -362,5 +394,7 @@ module.exports = {
   sumSummaryByEmailAndProject: sumSummaryByEmailAndProject,
   averageSummaryByProject: averageSummaryByProject,
   averageSummaryByEmail: averageSummaryByEmail,
-  averageSummaryByEmailAndProject: averageSummaryByEmailAndProject
+  averageSummaryByEmailAndProject: averageSummaryByEmailAndProject,
+  fastestByProject: fastestByProject,
+  slowestByProject: slowestByProject
 };

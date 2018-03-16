@@ -8,6 +8,11 @@
         <p>There are {{ numberOfUsers }} users kompiling this project. They have kompiled it {{ numberOfKompiles }} times.</p>
 
         <p>They have spent {{ totalTimeKompiling }} minutes kompiling. Their average by kompiling is {{ averageTimeKompiling }} minutes.</p>
+        <br>
+        <h4>Records</h4>
+
+        <p>The fastest is <b>{{ fastestUser }}</b> with a minimum kompile time of {{ minTime }} minutes</p>
+        <p>The slowest is <b>{{ slowestUser }}</b> with a maximum kompile time of {{ maxTime }} minutes</p>
       </div>
       <div class="col s12 m6 l6">
         <h4>History</h4>
@@ -53,7 +58,12 @@ export default {
       numberOfKompiles: 0,
       totalTimeKompiling: 0,
       averageTimeKompiling: 0,
-      project: ''
+      project: '',
+      slowestUser: '',
+      maxTime: 0,
+      fastestUser: '',
+      minTime: '',
+      recordLoaded: false
     }
   },
 
@@ -80,6 +90,14 @@ export default {
       }, 0))
       that.averageTimeKompiling = (that.totalTimeKompiling / that.numberOfKompiles).toFixed(2)
       that.kompilesLoaded = true
+    })
+
+    api.getRecords(this.project).then(function (kompile) {
+      that.slowestUser = kompile.data.slowest.user
+      that.fastestUser = kompile.data.fastest.user
+      that.minTime = dates.secondsToMinutes(kompile.data.fastest.duration)
+      that.maxTime = dates.secondsToMinutes(kompile.data.slowest.duration)
+      that.recordLoaded = true
     })
   }
 }
