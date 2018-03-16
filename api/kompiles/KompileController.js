@@ -33,6 +33,12 @@ router.get('/sum/summary', function(req, res, next) {
 	.catch(err => res.status(err.status).send(err));
 });
 
+router.get('/project/:project/record', function(req, res, next) {
+	kompileService.recordByProject(req.params.project)
+	.then(kompiles => res.send(kompiles))
+	.catch(err => res.status(err.status).send(err));
+});
+
 router.post('/', function(req, res, next) {
 	kompileService.saveKompile(req.body).then(kompile => res.send(kompile))
 	.catch(err => res.status(err.status).send(err));
