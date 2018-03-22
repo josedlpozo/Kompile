@@ -1,5 +1,6 @@
 <script>
 import { HorizontalBar } from 'vue-chartjs'
+import dates from '../dates/DateFormatter'
 export default HorizontalBar.extend({
   props: {
     chartData: {
@@ -28,7 +29,15 @@ export default HorizontalBar.extend({
           display: false
         },
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            label: function (tooltipItem, data) {
+              const value = data.datasets[0].data[tooltipItem.index]
+              return dates.formatTime(value)
+            }
+          }
+        }
       }
     }
   },

@@ -7,12 +7,12 @@
         <h4>Project summary</h4>
         <p>There are {{ numberOfUsers }} users kompiling this project. They have kompiled it {{ numberOfKompiles }} times.</p>
 
-        <p>They have spent {{ totalTimeKompiling }} minutes kompiling. Their average by kompiling is {{ averageTimeKompiling }} minutes.</p>
+        <p>They have spent {{ totalTimeKompiling }} kompiling. Their average by kompiling is {{ averageTimeKompiling }}.</p>
         <br>
         <h4>Records</h4>
 
-        <p>The fastest is <b>{{ fastestUser }}</b> with a minimum kompile time of {{ minTime }} minutes</p>
-        <p>The slowest is <b>{{ slowestUser }}</b> with a maximum kompile time of {{ maxTime }} minutes</p>
+        <p>The fastest is <b>{{ fastestUser }}</b> with a minimum kompile time of {{ minTime }}</p>
+        <p>The slowest is <b>{{ slowestUser }}</b> with a maximum kompile time of {{ maxTime }}</p>
       </div>
       <div class="col s12 m6 l6">
         <h4>History</h4>
@@ -85,18 +85,19 @@ export default {
       that.kompileTimes = kompiles.data.map(entry => dates.secondsToMinutes(entry.duration))
       that.kompileLabels = kompiles.data.map(entry => dates.format(entry.createdAt))
       that.numberOfKompiles = kompiles.data.length
-      that.totalTimeKompiling = dates.secondsToMinutes(kompiles.data.reduce(function (acc, next) {
+      const kompilingTime = kompiles.data.reduce(function (acc, next) {
         return acc + next.duration
-      }, 0))
-      that.averageTimeKompiling = (that.totalTimeKompiling / that.numberOfKompiles).toFixed(2)
+      }, 0)
+      that.totalTimeKompiling = dates.formatTime(kompilingTime)
+      that.averageTimeKompiling = dates.formatTime((kompilingTime / that.numberOfKompiles).toFixed(2))
       that.kompilesLoaded = true
     })
 
     api.getRecords(this.project).then(function (kompile) {
       that.slowestUser = kompile.data.slowest.user
       that.fastestUser = kompile.data.fastest.user
-      that.minTime = dates.secondsToMinutes(kompile.data.fastest.duration)
-      that.maxTime = dates.secondsToMinutes(kompile.data.slowest.duration)
+      that.minTime = dates.formatTime(kompile.data.fastest.duration)
+      that.maxTime = dates.formatTime(kompile.data.slowest.duration)
       that.recordLoaded = true
     })
   }
