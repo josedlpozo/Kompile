@@ -2,7 +2,7 @@
   <div id="app">
     <nav>
       <div class="nav-wrapper">
-        <a href="/" class="brand-logo">Kompiler</a>
+        <a href="/" class="brand-logo">Kompile</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li><a href="https://github.com/josedlpozo/Kompile">Contribute</a></li>
         </ul>
@@ -13,7 +13,7 @@
           <div class="container">
             <div class="row">
               <div class="col l6 s12">
-                <h5 class="white-text">Kompiler</h5>
+                <h5 class="white-text">Kompile</h5>
                 <p class="grey-text text-lighten-4">Build time counter</p>
               </div>
               <div class="col l4 offset-l2 s12">
