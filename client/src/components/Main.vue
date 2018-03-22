@@ -25,7 +25,6 @@
 
 <script>
 
-import dates from '../dates/DateFormatter'
 import api from '../api/ApiClient'
 import HorizontalLineChart from '@/components/HorizontalLineChart'
 import AutoComplete from '@/components/AutoComplete'
@@ -53,11 +52,11 @@ export default {
   created () {
     let that = this
     api.zipSumAverage(function (sum, average) {
-      that.averageTimes = average.data.map(entry => dates.secondsToMinutes(entry.average))
+      that.averageTimes = average.data.map(entry => entry.average)
       that.averageLabels = average.data.map(entry => entry.user + '/' + entry.project)
       that.averageLoaded = true
 
-      that.sumTimes = sum.data.map(entry => dates.secondsToMinutes(entry.sum))
+      that.sumTimes = sum.data.map(entry => entry.sum)
       that.sumLabels = sum.data.map(entry => entry.user + '/' + entry.project)
       that.sumLoaded = true
     })

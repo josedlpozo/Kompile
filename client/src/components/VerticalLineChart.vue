@@ -1,5 +1,6 @@
 <script>
 import { Line } from 'vue-chartjs'
+import dates from '../dates/DateFormatter'
 export default Line.extend({
   props: {
     chartData: {
@@ -29,7 +30,15 @@ export default Line.extend({
         },
         beginAtZero: true,
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            label: function (tooltipItem, data) {
+              const value = data.datasets[0].data[tooltipItem.index]
+              return dates.formatTime(value)
+            }
+          }
+        }
       }
     }
   },
