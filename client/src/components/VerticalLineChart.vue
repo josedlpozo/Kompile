@@ -35,7 +35,6 @@ export default Line.extend({
           callbacks: {
             label: function (tooltipItem, data) {
               const value = data.datasets[0].data[tooltipItem.index]
-              console.log(value)
               return dates.formatTime(value)
             }
           }
