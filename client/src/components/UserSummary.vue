@@ -7,7 +7,7 @@
         <h4>User summary</h4>
         <p>There are {{ numberOfProjects }} projects kompiled by this user. He/she has kompiled it {{ numberOfKompiles }} times.</p>
 
-        <p>He/she has spent {{ totalTimeKompiling }} minutes kompiling. His/her average by kompiling is {{ averageTimeKompiling }} minutes.</p>
+        <p>He/she has spent {{ totalTimeKompiling }} kompiling. His/her average by kompiling is {{ averageTimeKompiling }}.</p>
       </div>
       <div class="col s12 m6 l6">
         <h4>History</h4>
@@ -75,10 +75,11 @@ export default {
       that.kompileTimes = kompiles.data.map(entry => entry.duration)
       that.kompileLabels = kompiles.data.map(entry => dates.format(entry.createdAt))
       that.numberOfKompiles = kompiles.data.length
-      that.totalTimeKompiling = dates.secondsToMinutes(kompiles.data.reduce(function (acc, next) {
+      const kompilingTime = kompiles.data.reduce(function (acc, next) {
         return acc + next.duration
-      }, 0))
-      that.averageTimeKompiling = (that.totalTimeKompiling / that.numberOfKompiles).toFixed(2)
+      }, 0)
+      that.totalTimeKompiling = dates.formatTime(kompilingTime)
+      that.averageTimeKompiling = dates.formatTime((kompilingTime / that.numberOfKompiles).toFixed(2))
       that.kompilesLoaded = true
     })
   }
