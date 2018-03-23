@@ -71,18 +71,18 @@ export default {
     let that = this
     this.project = this.$route.params.project
     api.zipSumAverageByProject(this.project, function (sum, average) {
-      that.averageTimes = average.data.map(entry => dates.secondsToMinutes(entry.average))
+      that.averageTimes = average.data.map(entry => entry.average)
       that.averageLabels = average.data.map(entry => entry.user)
 
       that.numberOfUsers = that.averageLabels.length
 
-      that.sumTimes = sum.data.map(entry => dates.secondsToMinutes(entry.sum))
+      that.sumTimes = sum.data.map(entry => entry.sum)
       that.sumLabels = sum.data.map(entry => entry.user)
       that.loaded = true
     })
 
     api.getKompilesByProject(this.project).then(function (kompiles) {
-      that.kompileTimes = kompiles.data.map(entry => dates.secondsToMinutes(entry.duration))
+      that.kompileTimes = kompiles.data.map(entry => entry.duration)
       that.kompileLabels = kompiles.data.map(entry => dates.format(entry.createdAt))
       that.numberOfKompiles = kompiles.data.length
       const kompilingTime = kompiles.data.reduce(function (acc, next) {
