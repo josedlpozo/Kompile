@@ -5,22 +5,22 @@
       <div class="col s12 m6 l6">
 
         <h4>User summary</h4>
-        <p>There are {{ numberOfProjects }} projects kompiled by this user. He/she has kompiled it {{ numberOfKompiles }} times.</p>
+        <p>There are {{ userSummary.numberOfProjects }} projects kompiled by this user. He/she has kompiled it {{ userSummary.numberOfKompiles }} times.</p>
 
-        <p>He/she has spent {{ totalTimeKompiling }} kompiling. His/her average by kompiling is {{ averageTimeKompiling }}.</p>
+        <p>He/she has spent {{ userSummary.totalTimeKompiling }} kompiling. His/her average by kompiling is {{ userSummary.averageTimeKompiling }}.</p>
       </div>
       <div class="col s12 m6 l6">
         <h4>History</h4>
-        <vertical-line-chart v-if="kompilesLoaded" :chart-data="kompileTimes" :chart-labels="kompileLabels"></vertical-line-chart>
+        <vertical-line-chart v-if="loaded" :chart-data="userSummary.kompileTimes" :chart-labels="userSummary.kompileLabels"></vertical-line-chart>
       </div>
     </div>
     <div class="row">
       <div class="col s12 m12 l12">
         <h4>Average</h4>
-        <horizontal-line-chart v-if="loaded" :chart-data="averageTimes" :chart-labels="averageLabels"></horizontal-line-chart>
+        <horizontal-line-chart v-if="loaded" :chart-data="userSummary.averageTimes" :chart-labels="userSummary.averageLabels"></horizontal-line-chart>
 
         <h4>Sum</h4>
-        <horizontal-line-chart v-if="loaded" :chart-data="sumTimes" :chart-labels="sumLabels"></horizontal-line-chart>
+        <horizontal-line-chart v-if="loaded" :chart-data="userSummary.sumTimes" :chart-labels="userSummary.sumLabels"></horizontal-line-chart>
       </div>
     </div>
   </div>
@@ -28,8 +28,7 @@
 
 <script>
 
-import api from '../api/ApiClient'
-import dates from '../dates/DateFormatter'
+import service from '@/domain/UserSummaryService'
 import VerticalLineChart from '@/components/VerticalLineChart'
 import HorizontalLineChart from '@/components/HorizontalLineChart'
 
@@ -41,52 +40,23 @@ export default {
   },
   data () {
     return {
-      kompilesLoaded: false,
       loaded: false,
-      sumTimes: [],
-      sumLabels: [],
-      averageTimes: [],
-      averageLabels: [],
-      kompileTimes: [],
-      kompileLabels: [],
-      numberOfProjects: 0,
-      numberOfKompiles: 0,
-      totalTimeKompiling: 0,
-      averageTimeKompiling: 0,
-      project: ''
+      user: '',
+      userSummary: ''
     }
   },
 
   created () {
     let that = this
     this.user = this.$route.params.user
-    api.zipSumAverageByUser(this.user, function (sum, average) {
-      that.averageTimes = average.data.map(entry => entry.average)
-      that.averageLabels = average.data.map(entry => entry.project)
-
-      that.numberOfProjects = that.averageLabels.length
-
-      that.sumTimes = sum.data.map(entry => entry.sum)
-      that.sumLabels = sum.data.map(entry => entry.project)
+    service.get(this.user).then((userSummary) => {
       that.loaded = true
-    })
-
-    api.getKompilesByUser(this.user).then(function (kompiles) {
-      that.kompileTimes = kompiles.data.map(entry => entry.duration)
-      that.kompileLabels = kompiles.data.map(entry => dates.format(entry.createdAt))
-      that.numberOfKompiles = kompiles.data.length
-      const kompilingTime = kompiles.data.reduce(function (acc, next) {
-        return acc + next.duration
-      }, 0)
-      that.totalTimeKompiling = dates.formatTime(kompilingTime)
-      that.averageTimeKompiling = dates.formatTime((kompilingTime / that.numberOfKompiles).toFixed(2))
-      that.kompilesLoaded = true
+      that.userSummary = userSummary
     })
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1, h2 {
   font-weight: normal;

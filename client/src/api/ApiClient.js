@@ -54,12 +54,16 @@ function getKompilesByUser (user) {
   return axios.get(host + 'kompiles?user=' + user)
 }
 
-function zipSumAverageByProject (project, callback) {
-  axios.all([getSumByProject(project), getAverageByProject(project)]).then(axios.spread(callback))
+function zip (first, second, callback) {
+  axios.all([first(), second()]).then(axios.spread(callback))
 }
 
-function zipSumAverageByUser (user, callback) {
-  axios.all([getSumByUser(user), getAverageByUser(user)]).then(axios.spread(callback))
+function zip3 (first, second, third, callback) {
+  axios.all([first(), second(), third()]).then(axios.spread(callback))
+}
+
+function zip4 (first, second, third, fourth, callback) {
+  axios.all([first(), second(), third(), fourth()]).then(axios.spread(callback))
 }
 
 module.exports = {
@@ -73,9 +77,10 @@ module.exports = {
   getAverageByProject: getAverageByProject,
   getSumByUser: getSumByUser,
   getAverageByUser: getAverageByUser,
-  zipSumAverageByProject: zipSumAverageByProject,
-  zipSumAverageByUser: zipSumAverageByUser,
   getKompilesByProject: getKompilesByProject,
   getKompilesByUser: getKompilesByUser,
-  getRecords: getRecords
+  getRecords: getRecords,
+  zip: zip,
+  zip3: zip3,
+  zip4: zip4
 }
