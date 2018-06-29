@@ -1,0 +1,15 @@
+apiVersion: 1
+
+datasources:
+- name: Default
+  type: postgres
+  access: proxy
+  url: db:5432
+  secureJsonData:
+      password: "kompile18"
+  user: kompile
+  database: kompile
+  jsonData:
+     sslmode: disable
+  isDefault: true
+  editable: true
