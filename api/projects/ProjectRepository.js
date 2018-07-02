@@ -13,6 +13,15 @@ function findBy(prefix) {
 	});
 }
 
+function find(name) {
+	return models.Project.find({
+		where: {
+			name: name
+		}
+	});
+}
+
 module.exports = {
-	findBy: findBy
+	findBy: findBy,
+	find: find
 }

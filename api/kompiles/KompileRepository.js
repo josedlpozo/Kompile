@@ -100,15 +100,11 @@ function saveKompile(kompile) {
       alias: kompile.alias
     }
   }).spread((user, created) => {
-    console.log('User')
-    console.log(created)
     return models.Project.findOrCreate({
       where: {
         name: kompile.project
       }
     }).spread((project, created) => {
-      console.log('Project')
-      console.log(created)
       return models.Kompile.create({
             UserId: user.id,
             ProjectId: project.id,

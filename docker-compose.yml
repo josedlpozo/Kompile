@@ -26,6 +26,7 @@ services:
       - '3000:3000'
     links:
       - db
+      - grafana
     environment:
       - PORT=3000
       - NODE_ENV=production

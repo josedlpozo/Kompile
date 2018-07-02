@@ -3,6 +3,9 @@
 var _ = require('underscore')
 var kompileRepository = require('./KompileRepository');
 var kompileMapper = require('./KompileMapper');
+var projectService = require('./../projects/ProjectService')
+var userService = require('./../users/UserService')
+var grafanaService = require('./../grafana/GrafanaService')
 var error = require('./../commons/Error');
 
 function emailOrProjectIsRequired() {
@@ -57,13 +60,17 @@ function retrieveKompilesByProject(project) {
 }
 
 function saveKompile(kompile) {
+  projectService.find(kompile.project).then(project => { if(!project) grafanaService.createDashboardFor(kompile.project) });
+  userService.find(kompile.user).then(user => { if(!user) grafanaService.createUser(kompile.user, kompile.alias) });
 	return new Promise((resolve, reject) => {
       if (!kompile.duration || kompile.duration == 0) reject(error.createError(400, 'duration is required'))
       else if(!kompile.user) reject(error.createError(400, 'user is required'))
       else if(!kompile.project) reject(error.createError(400, 'project is required'))
-    	else kompileRepository.saveKompile(kompile)
-      		.then(kompile => resolve(kompileMapper.mapKompile(kompile)))
-      		.catch(err => reject(error.unknownError(err)));
+    	else {
+        kompileRepository.saveKompile(kompile)
+          .then(kompile => resolve(kompileMapper.mapKompile(kompile)))
+          .catch(err => reject(error.unknownError(err)));
+      }
   	});
 }
 
