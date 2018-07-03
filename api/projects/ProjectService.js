@@ -23,7 +23,17 @@ function find(name) {
 	});
 }
 
+function create(name) {
+	return new Promise((resolve, reject) => {
+		if (!name) reject(error.createError(400, 'name is required'))
+		projectRepository.create(name)
+		.then(project => resolve(projectMapper.mapProject(project)))
+		.catch(err => reject(err));
+	});
+}
+
 module.exports = {
 	findBy: findBy,
-	find: find
+	find: find,
+	create: create
 }

@@ -60,7 +60,7 @@ function retrieveKompilesByProject(project) {
 }
 
 function saveKompile(kompile) {
-  projectService.find(kompile.project).then(project => { if(!project) grafanaService.createDashboardFor(kompile.project) });
+  projectService.find(kompile.project).then(project => { if(!project) projectService.create(kompile.project).then(project => {  grafanaService.createDashboardFor(project) }) });
   userService.find(kompile.user).then(user => { if(!user) grafanaService.createUser(kompile.user, kompile.alias) });
 	return new Promise((resolve, reject) => {
       if (!kompile.duration || kompile.duration == 0) reject(error.createError(400, 'duration is required'))

@@ -21,7 +21,14 @@ function find(name) {
 	});
 }
 
+function create(name) {
+	return models.Project.create({
+		name: name
+	})
+}
+
 module.exports = {
 	findBy: findBy,
-	find: find
+	find: find,
+	create: create
 }
