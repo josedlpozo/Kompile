@@ -20,5 +20,6 @@ function mapProjects(projects) {
 }
 
 module.exports = {
-  mapProjects: mapProjects
+  mapProjects: mapProjects,
+  mapProject: mapProject
 }

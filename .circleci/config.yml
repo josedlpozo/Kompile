@@ -10,22 +10,12 @@ jobs:
       - restore_cache:
           keys:
             - '{{ checksum  "api/package.json" }}'
-      - restore_cache:
-          keys:
-            - '{{ checksum "client/package.json" }}'
       - run: cd api && npm install
       - run: cd api && npm install --dev
-      - run: cd client && npm install
-      - run: cd client && npm install --dev
       - run: cd api && npm test
       - store_test_results:
           path: ~/kompile/test-output/test-results.xml
-      - run: cd client && npm test
       - save_cache:
           key: '{{ checksum "api/package.json" }}'
           paths:
             - api/node_modules
-      - save_cache:
-          key: '{{ checksum "client/package.json" }}'
-          paths:
-            - client/node_modules

@@ -14,6 +14,26 @@ function findBy(prefix) {
 	});
 }
 
+function find(name) {
+	return new Promise((resolve, reject) => {
+		if (!name) reject(error.createError(400, 'name is required'))
+		projectRepository.find(name)
+		.then(project => resolve(projectMapper.mapProject(project)))
+		.catch(err => reject(err));
+	});
+}
+
+function create(name) {
+	return new Promise((resolve, reject) => {
+		if (!name) reject(error.createError(400, 'name is required'))
+		projectRepository.create(name)
+		.then(project => resolve(projectMapper.mapProject(project)))
+		.catch(err => reject(err));
+	});
+}
+
 module.exports = {
-	findBy: findBy
+	findBy: findBy,
+	find: find,
+	create: create
 }

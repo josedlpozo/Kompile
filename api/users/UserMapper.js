@@ -21,5 +21,6 @@ function mapUsers(users) {
 }
 
 module.exports = {
-  mapUsers: mapUsers
+  mapUsers: mapUsers,
+  mapUser: mapUser
 }

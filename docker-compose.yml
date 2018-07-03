@@ -1,31 +1,44 @@
 version: '3'
 
 services:
+  db:
+    container_name: db
+    build: ./db
+    ports:
+      - '5443:5432'
+    environment:
+      - POSTGRES_USER=kompile
+      - POSTGRES_PASSWORD=kompile18
+  grafana:
+    container_name: grafana
+    build: ./grafana
+    ports:
+      - '5000:3000'
+    user: "104"
+    depends_on:
+      - db
+    links:
+      - db
   api:
     container_name: api
     build: ./api
     ports:
       - '3000:3000'
+    links:
+      - db
+      - grafana
     environment:
       - PORT=3000
       - NODE_ENV=production
-  web:
-    container_name: web
-    build: ./client
-    ports:
-      - '8080:8080'
-    environment:
-      - PORT=8080
-      - NODE_ENV=production
-    depends_on:
-      - api
-    links:
-      - api
+      - DB_USERNAME=kompile
+      - DB_PASSWORD=kompile18
+      - DB_NAME=kompile
+      - DB_HOSTNAME=db
   nginx:
     container_name: nginx
     build: ./nginx
     links:
       - api
-      - web
+      - grafana
     ports:
       - '80:80'

@@ -14,6 +14,14 @@ function findBy(prefix) {
 	});
 }
 
+function find(email) {
+	return new Promise((resolve, reject) => {
+		if (!email) reject(error.createError(400, 'email is required'))
+		userRepository.find(email).then(user => resolve(userMapper.mapUser(user))).catch(err => reject(err));
+	});
+}
+
 module.exports = {
-	findBy: findBy
+	findBy: findBy,
+	find: find
 }
