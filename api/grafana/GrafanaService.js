@@ -20,7 +20,11 @@ function createUser(email, alias) {
     	email: email,
     	login: alias,
     	password: 'default'
-  	}).then(response => console.log(response)).catch(err => console.log(err))
+  	}).then(response => {
+  		axios.put(grafana + 'api/admin/users/' + response.data.id + '/permissions', {
+  			isGrafanaAdmin: true
+  		}).then(response => console.log(response)).catch(err => console.log(err));
+  	}).catch(err => console.log(err))
 }
 
 module.exports = {

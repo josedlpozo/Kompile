@@ -66,11 +66,9 @@ function saveKompile(kompile) {
       if (!kompile.duration || kompile.duration == 0) reject(error.createError(400, 'duration is required'))
       else if(!kompile.user) reject(error.createError(400, 'user is required'))
       else if(!kompile.project) reject(error.createError(400, 'project is required'))
-    	else {
-        kompileRepository.saveKompile(kompile)
+    	else kompileRepository.saveKompile(kompile)
           .then(kompile => resolve(kompileMapper.mapKompile(kompile)))
           .catch(err => reject(error.unknownError(err)));
-      }
   	});
 }
 
