@@ -13,6 +13,15 @@ function findBy(prefix) {
 	});
 }
 
+function find(email) {
+	return models.User.find({
+		where: {
+			email: email
+		}
+	});
+}
+
 module.exports = {
-	findBy: findBy
+	findBy: findBy,
+	find: find
 }
